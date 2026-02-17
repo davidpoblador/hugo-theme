@@ -1,0 +1,13 @@
+{{- if eq .icon "linkedin" -}}
+{{- partial "icons/linkedin.html" . -}}
+{{- else if eq .icon "bluesky" -}}
+{{- partial "icons/bluesky.html" . -}}
+{{- else if eq .icon "x" -}}
+{{- partial "icons/x.html" . -}}
+{{- else if eq .icon "github" -}}
+{{- partial "icons/github.html" . -}}
+{{- else if eq .icon "instagram" -}}
+{{- partial "icons/instagram.html" . -}}
+{{- else if eq .icon "rss" -}}
+{{- partial "icons/rss.html" . -}}
+{{- end -}}

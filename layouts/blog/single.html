@@ -1,0 +1,81 @@
+{{ define "title" }}{{ .Title }} &mdash; {{ .Site.Title }}{{ end }}
+{{ define "meta_description" }}{{ .Description | default .Site.Params.description }}{{ end }}
+{{ define "og_title" }}{{ .Title }}{{ end }}
+{{ define "og_description" }}{{ .Description | default .Site.Params.description }}{{ end }}
+{{ define "og_type" }}article{{ end }}
+{{ define "og_image" }}{{ with .Resources.GetMatch "artwork.*" }}{{ (.Fill "1200x630 jpg q85").Permalink }}{{ else }}{{ .Site.Params.photo | absURL }}{{ end }}{{ end }}
+
+{{ define "content" }}
+{{ $artwork := .Resources.GetMatch "artwork.*" }}
+{{ with $artwork }}
+{{- $sm := .Fill "800x400 webp q80" -}}
+{{- $md := .Fill "1200x600 webp q80" -}}
+{{- $lg := .Fill "1600x800 webp q80" -}}
+<!-- Hero with Artwork -->
+<div class="relative w-full mb-10 border border-neutral-200 overflow-hidden">
+  <img
+    src="{{ $md.RelPermalink }}"
+    srcset="{{ $sm.RelPermalink }} 800w, {{ $md.RelPermalink }} 1200w, {{ $lg.RelPermalink }} 1600w"
+    sizes="(max-width: 768px) 100vw, 672px"
+    width="{{ $md.Width }}"
+    height="{{ $md.Height }}"
+    alt=""
+    fetchpriority="high"
+    class="w-full aspect-[2/1] object-cover">
+  <div class="absolute inset-0 bg-gradient-to-t from-neutral-900/80 to-transparent"></div>
+  <div class="absolute bottom-0 left-0 right-0 p-5 md:p-8">
+    <p class="font-mono text-xs text-neutral-300 mb-3">
+      <span class="bg-neutral-900/70 px-2 py-1">{{ time.Format ":date_medium" $.Date }}{{ with $.Params.updated }} &middot; updated {{ time.Format ":date_medium" . }}{{ end }}</span>
+    </p>
+    <h1 class="font-mono text-xl md:text-3xl font-bold text-white leading-tight">
+      <span class="bg-neutral-900/70 decoration-clone box-decoration-clone px-2 py-1">{{ $.Title }}</span>
+    </h1>
+  </div>
+</div>
+{{ else }}
+<!-- Header without Artwork -->
+<header class="mb-8">
+  <p class="font-mono text-xs text-neutral-400 mb-3">
+    {{ time.Format ":date_medium" .Date }}{{ with .Params.updated }} &middot; updated {{ time.Format ":date_medium" . }}{{ end }}
+  </p>
+  <h1 class="font-mono text-2xl md:text-3xl font-bold text-neutral-900 leading-tight mb-6">{{ .Title }}</h1>
+</header>
+{{ end }}
+
+{{ with .Description }}
+<!-- Lead -->
+<p class="text-base md:text-lg font-medium text-neutral-700 leading-relaxed mb-10">
+  {{ . }}
+</p>
+{{ end }}
+
+<!-- Article Body -->
+<article class="text-sm md:text-base leading-[1.8] text-neutral-600 space-y-6">
+  {{ .Content }}
+</article>
+
+<!-- Tags -->
+{{ with .GetTerms "tags" }}
+<div class="mt-10 flex flex-wrap gap-2">
+  {{ range . }}
+  <a href="{{ .RelPermalink }}" class="font-mono text-xs text-neutral-400 bg-neutral-100 hover:bg-neutral-200 hover:text-neutral-600 px-2 py-1 transition-colors">{{ .LinkTitle }}</a>
+  {{ end }}
+</div>
+{{ end }}
+
+<!-- Post Navigation -->
+<nav class="mt-14 pt-6 border-t border-neutral-200 flex items-baseline justify-between gap-4">
+  <div>
+    {{ with .NextInSection }}
+    <a href="{{ .RelPermalink }}" class="font-mono text-sm text-accent hover:underline">&larr; {{ .Title | truncate 30 }}</a>
+    {{ else }}
+    <a href="/blog/" class="font-mono text-sm text-accent hover:underline">&larr; Back to blog</a>
+    {{ end }}
+  </div>
+  <div class="text-right">
+    {{ with .PrevInSection }}
+    <a href="{{ .RelPermalink }}" class="font-mono text-sm text-accent hover:underline">{{ .Title | truncate 30 }} &rarr;</a>
+    {{ end }}
+  </div>
+</nav>
+{{ end }}

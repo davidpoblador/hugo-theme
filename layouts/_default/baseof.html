@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en" }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ block "meta_description" . }}{{ .Site.Params.description }}{{ end }}">
+  {{- with .Params.noindex }}
+  <meta name="robots" content="noindex">
+  {{- end }}
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preload" href="/fonts/source-code-pro-latin.woff2" as="font" type="font/woff2" crossorigin>
+  {{- with .Site.Params.analyticsSrc }}
+  {{- $u := urls.Parse . }}
+  <link rel="preconnect" href="{{ $u.Scheme }}://{{ $u.Host }}" crossorigin>
+  {{- end }}
+  <!-- OpenGraph -->
+  <meta property="og:site_name" content="{{ .Site.Title }}">
+  <meta property="og:title" content="{{ block "og_title" . }}{{ .Site.Title }}{{ end }}">
+  <meta property="og:description" content="{{ block "og_description" . }}{{ .Site.Params.description }}{{ end }}">
+  <meta property="og:type" content="{{ block "og_type" . }}website{{ end }}">
+  <meta property="og:url" content="{{ replace .Permalink "/index.html" "/" }}">
+  <meta property="og:image" content="{{ block "og_image" . }}{{ .Site.Params.photo | absURL }}{{ end }}">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  {{- with .Site.Params.twitter }}
+  <meta name="twitter:site" content="{{ . }}">
+  {{- end }}
+  {{- $css := resources.Get "css/style.css" -}}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}?v={{ $css.Content | md5 }}">
+  {{- $js := resources.Get "js/main.js" -}}
+  <script src="{{ $js.RelPermalink }}?v={{ $js.Content | md5 }}" type="module"></script>
+  {{- with .Site.Params.analyticsID }}
+  <script data-website-id="{{ . }}" defer src="{{ $.Site.Params.analyticsSrc }}"></script>
+  {{- end }}
+  {{- range .Site.Params.alternates }}
+  <link rel="alternate" hreflang="{{ .hreflang }}" href="{{ .href }}">
+  {{- end }}
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/blog/feed.xml">
+  {{- with .OutputFormats.Get "md" }}
+  <link rel="alternate" type="{{ .MediaType }}" href="{{ .RelPermalink }}">
+  {{- end }}
+  {{- $cleanPath := replace (replace .RelPermalink "/index.html" "/" ) ".html" "" -}}
+  {{- $isHome := or (eq $cleanPath "/") (eq .RelPermalink "/") -}}
+  {{- $isBlogList := or (eq $cleanPath "/blog") (eq $cleanPath "/blog/") -}}
+  {{- $isBlogPost := and (not $isHome) (not $isBlogList) (hasPrefix $cleanPath "/blog/") -}}
+  {{- $blogPostSlug := replace (replace $cleanPath "/blog/" "") "/" "" -}}
+  {{- $isTagList := or (eq $cleanPath "/tags") (eq $cleanPath "/tags/") -}}
+  {{- $isTagSingle := and (not $isTagList) (hasPrefix $cleanPath "/tags/") -}}
+  {{- $tagSlug := replace (replace $cleanPath "/tags/" "") "/" "" -}}
+  {{- $pageSlug := replace (replace $cleanPath "/" "") "/" "" -}}
+  <!-- Breadcrumb structured data (Google SEO) -->
+  {{- if not $isHome }}
+  <script type="application/ld+json">
+  {{- $items := slice (dict "position" 1 "name" "Home" "item" (.Site.BaseURL | strings.TrimRight "/")) -}}
+  {{- if $isBlogList -}}
+    {{- $items = $items | append (dict "position" 2 "name" "Blog" "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
+  {{- else if $isBlogPost -}}
+    {{- $items = $items | append (dict "position" 2 "name" "Blog" "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 3 "name" .Title "item" (.Permalink | strings.TrimRight "/")) -}}
+  {{- else if $isTagList -}}
+    {{- $items = $items | append (dict "position" 2 "name" "Blog" "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 3 "name" "Tags" "item" ("tags/" | absURL | strings.TrimRight "/")) -}}
+  {{- else if $isTagSingle -}}
+    {{- $items = $items | append (dict "position" 2 "name" "Blog" "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 3 "name" "Tags" "item" ("tags/" | absURL | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 4 "name" .Title "item" (.Permalink | strings.TrimRight "/")) -}}
+  {{- else -}}
+    {{- $items = $items | append (dict "position" 2 "name" .Title "item" (.Permalink | strings.TrimRight "/")) -}}
+  {{- end -}}
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {{- range $i, $el := $items -}}
+      {{ if $i }},{{ end }}
+      {
+        "@type": "ListItem",
+        "position": {{ $el.position }},
+        "name": {{ $el.name | jsonify }},
+        "item": {{ $el.item | jsonify }}
+      }
+      {{- end -}}
+    ]
+  }
+  </script>
+  {{- end }}
+</head>
+
+<body class="min-h-screen text-neutral-800 antialiased bg-site-gradient">
+
+  <!-- Sticky Top Bar -->
+  <div class="lg:sticky lg:top-0 z-50 bg-white/80 lg:backdrop-blur-sm border-b border-neutral-200">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center h-10 font-mono text-sm text-neutral-400">
+        {{- if $isHome -}}
+          <span class="text-neutral-700 font-medium"><span class="hidden sm:inline">{{ .Site.Params.domain }}:</span>~</span>
+        {{- else -}}
+          <a href="/" class="text-neutral-400 hover:text-neutral-600 transition-colors no-underline"><span class="hidden sm:inline">{{ .Site.Params.domain }}:</span>~</a>
+          {{- if $isBlogList -}}
+            <span class="text-neutral-700 font-medium">/blog</span>
+          {{- else if $isBlogPost -}}
+            <a href="/blog/" class="text-neutral-400 hover:text-neutral-600 transition-colors no-underline">/blog</a>
+            <span class="text-neutral-700 font-medium inline-block max-w-[40ch] lg:max-w-none truncate align-bottom">/{{ $blogPostSlug }}</span>
+          {{- else if $isTagList -}}
+            <a href="/blog/" class="text-neutral-400 hover:text-neutral-600 transition-colors no-underline">/blog</a>
+            <span class="text-neutral-700 font-medium">/tags</span>
+          {{- else if $isTagSingle -}}
+            <a href="/blog/" class="text-neutral-400 hover:text-neutral-600 transition-colors no-underline">/blog</a>
+            <a href="/tags/" class="text-neutral-400 hover:text-neutral-600 transition-colors no-underline">/tags</a>
+            <span class="text-neutral-700 font-medium">/{{ $tagSlug }}</span>
+          {{- else -}}
+            <span class="text-neutral-700 font-medium">/{{ $pageSlug }}</span>
+          {{- end -}}
+        {{- end -}}
+        <span class="text-neutral-300">$</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Header -->
+  <div class="lg:hidden px-6 pt-6 pb-5 border-b border-neutral-100 text-center">
+    <div class="mb-3">
+      <a href="/" class="no-underline"><img alt="{{ .Site.Title }}" src="/{{ .Site.Params.photo }}" width="192" height="192" class="w-16 h-16 rounded-full object-cover border-2 border-neutral-200 mx-auto mb-3"></a>
+      <a href="/" class="font-mono text-lg font-bold text-neutral-900 lowercase cursor block no-underline hover:no-underline">{{ .Site.Title }}</a>
+      <p class="text-sm text-neutral-500 mt-1">{{ .Site.Params.subtitle }}</p>
+      {{- with .Site.Params.affiliation }}
+      <p class="text-sm text-neutral-500 mt-0.5">{{ $.Site.Params.affiliationRole }} at <a href="{{ $.Site.Params.affiliationURL }}" class="underline decoration-neutral-300/60 underline-offset-2 hover:text-accent hover:decoration-accent/40 transition-colors">{{ . }}</a></p>
+      {{- end }}
+    </div>
+    <div class="flex items-center justify-center gap-3 flex-wrap mt-3">
+      {{ range $i, $link := .Site.Params.nav }}
+      {{ if $i }}<span class="text-neutral-300">&middot;</span>{{ end }}
+      <a href="{{ $link.url }}" class="text-sm text-neutral-500 hover:text-accent transition-colors">{{ $link.name }}</a>
+      {{ end }}
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="lg:grid lg:grid-cols-[270px_1fr] lg:gap-16 lg:gap-20">
+
+      <!-- Desktop Sidebar -->
+      <aside class="hidden lg:block sticky top-10 self-start pt-8 lg:pt-12 max-h-screen overflow-y-auto">
+        <div>
+
+          <!-- Identity -->
+          <div class="mb-8">
+            <a href="/" class="no-underline"><img alt="{{ .Site.Title }}" src="/{{ .Site.Params.photo }}" width="192" height="192" class="w-full aspect-square rounded-full object-cover border-2 border-neutral-200 mb-4"></a>
+            <a href="/" class="font-mono text-lg font-bold text-neutral-900 lowercase cursor block no-underline hover:no-underline">{{ .Site.Title }}</a>
+            <p class="text-xs text-neutral-500 mt-2">{{ .Site.Params.subtitle }}</p>
+            {{- with .Site.Params.affiliation }}
+            <p class="text-xs text-neutral-500 mt-0.5">{{ $.Site.Params.affiliationRole }} at <a href="{{ $.Site.Params.affiliationURL }}" class="underline decoration-neutral-300/60 underline-offset-2 hover:text-accent hover:decoration-accent/40 transition-colors">{{ . }}</a></p>
+            {{- end }}
+          </div>
+
+          <!-- Navigation -->
+          {{ with .Site.Params.nav }}
+          <div class="mb-6">
+            <p class="font-mono text-xs text-neutral-300 mb-2">// navigation</p>
+            <div class="space-y-1">
+              {{ range . }}
+              <a href="{{ .url }}" class="text-sm text-neutral-500 hover:text-accent transition-colors block">{{ .name }}</a>
+              {{ end }}
+            </div>
+          </div>
+          {{ end }}
+
+          <!-- Elsewhere -->
+          {{ with .Site.Params.elsewhere }}
+          <div class="mb-6">
+            <p class="font-mono text-xs text-neutral-300 mb-2">// elsewhere</p>
+            <div class="space-y-1">
+              {{ range . }}
+              <a href="{{ .url }}" class="text-sm text-neutral-500 hover:text-accent transition-colors block">{{ .name }}</a>
+              {{ end }}
+            </div>
+          </div>
+          {{ end }}
+
+          <!-- Connect -->
+          {{ with .Site.Params.social }}
+          <div class="mb-6">
+            <p class="font-mono text-xs text-neutral-300 mb-3">// connect</p>
+            <div class="flex items-center gap-3">
+              {{ range . }}
+              <a href="{{ .url }}" class="text-neutral-400 hover:text-accent transition-colors no-underline" title="{{ .name }}" aria-label="{{ .name }}">{{ partial "icons/social-icon.html" (dict "icon" .icon "class" "w-[18px] h-[18px]") }}</a>
+              {{ end }}
+              <a href="/blog/feed.xml" class="text-neutral-400 hover:text-accent transition-colors no-underline" title="RSS" aria-label="RSS">{{ partial "icons/social-icon.html" (dict "icon" "rss" "class" "w-[18px] h-[18px]") }}</a>
+            </div>
+          </div>
+          {{ end }}
+
+          <!-- Book a Chat -->
+          {{- with .Site.Params.ctaLabel }}
+          <a href="{{ $.Site.Params.ctaURL }}" class="inline-block font-mono text-xs text-accent border border-accent px-4 py-2 hover:bg-accent hover:text-white transition-colors no-underline">{{ . }}</a>
+          {{- end }}
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="min-w-0 max-w-2xl mx-auto lg:mx-0 py-8 lg:py-12">
+        {{ block "content" . }}{{ end }}
+      </main>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-neutral-200 mt-8 bg-white/80">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-6 text-center flex flex-col items-center gap-0">
+      <div class="hidden lg:flex items-center justify-center gap-2 flex-wrap h-8">
+        {{ range $i, $link := .Site.Params.elsewhere }}
+        {{ if $i }}<span class="text-neutral-300">&middot;</span>{{ end }}
+        <a href="{{ $link.url }}" class="text-xs text-neutral-400 hover:text-neutral-600 transition-colors">{{ $link.name }}</a>
+        {{ end }}
+      </div>
+      <div class="flex lg:hidden items-center justify-center gap-2 flex-wrap h-8">
+        {{- $n := 0 -}}
+        {{ range .Site.Params.elsewhere }}{{ if .footer }}
+        {{ if $n }}<span class="text-neutral-300">&middot;</span>{{ end }}
+        <a href="{{ .url }}" class="text-xs text-neutral-400 hover:text-neutral-600 transition-colors">{{ .name }}</a>
+        {{- $n = add $n 1 -}}
+        {{ end }}{{ end }}
+      </div>
+      <p class="font-mono text-xs text-neutral-400 h-8 flex items-center gap-2">&copy; {{ now.Format "2006" }} {{ .Site.Title }}{{ with .Site.Params.ctaLabel }} <span class="text-neutral-300 lg:hidden">&middot;</span> <a href="{{ $.Site.Params.ctaURL }}" class="lg:hidden font-mono text-xs text-accent hover:text-accent transition-colors">{{ . }}</a>{{ end }}</p>
+      <div class="flex items-center justify-center gap-3 h-8">
+        {{ range .Site.Params.social }}
+        <a href="{{ .url }}" class="text-neutral-300 hover:text-accent transition-colors no-underline" title="{{ .name }}" aria-label="{{ .name }}">{{ partial "icons/social-icon.html" (dict "icon" .icon "class" "w-4 h-4") }}</a>
+        {{ end }}
+        <a href="/blog/feed.xml" class="text-neutral-300 hover:text-accent transition-colors no-underline" title="RSS" aria-label="RSS">{{ partial "icons/social-icon.html" (dict "icon" "rss" "class" "w-4 h-4") }}</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

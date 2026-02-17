@@ -1,0 +1,18 @@
+# {{ .Site.Title }}
+
+> {{ .Site.Params.description }}
+
+{{ .Site.Params.description }}
+
+## Blog Posts
+
+{{ range (where .Site.RegularPages "Section" "blog").ByDate.Reverse -}}
+- [{{ .Title }}]({{ replace .Permalink ".html" ".md" }}): {{ with .Description }}{{ . }}{{ else }}{{ .Summary | plainify | truncate 120 }}{{ end }}
+{{ end }}
+## Pages
+
+{{ range where .Site.RegularPages "Section" "" -}}
+{{ if ne .RelPermalink "/" -}}
+- [{{ .Title }}]({{ replace .Permalink ".html" ".md" }})
+{{ end -}}
+{{ end }}
