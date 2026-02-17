@@ -1,7 +1,7 @@
-{{ define "title" }}Tags &mdash; {{ .Site.Title }}{{ end }}
+{{ define "title" }}{{ T "breadcrumb_tags" }} &mdash; {{ .Site.Title }}{{ end }}
 
 {{ define "content" }}
-<h1 class="font-mono text-2xl md:text-3xl font-bold text-neutral-900 dark:text-neutral-100 leading-tight mb-8">// tags</h1>
+<h1 class="font-mono text-2xl md:text-3xl font-bold text-neutral-900 dark:text-neutral-100 leading-tight mb-8">// {{ T "tags_title" }}</h1>
 <div class="space-y-2">
   {{ range .Data.Terms.Alphabetical }}
   <a href="{{ .Page.RelPermalink }}" class="inline-block font-mono text-sm text-accent hover:underline mr-4 mb-2">{{ .Page.LinkTitle }} <span class="text-neutral-400 dark:text-neutral-500">({{ .Count }})</span></a>

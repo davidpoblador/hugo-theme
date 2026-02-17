@@ -1,0 +1,41 @@
+[breadcrumb_home]
+other = "Home"
+
+[breadcrumb_blog]
+other = "Blog"
+
+[breadcrumb_tags]
+other = "Tags"
+
+[toggle_theme]
+other = "Toggle theme"
+
+[nav_label]
+other = "navigation"
+
+[elsewhere_label]
+other = "elsewhere"
+
+[connect_label]
+other = "connect"
+
+[rss]
+other = "RSS"
+
+[back_to_blog]
+other = "Back to blog"
+
+[copied]
+other = "copied!"
+
+[copy_rss_url]
+other = "Copy RSS feed URL"
+
+[tags_title]
+other = "tags"
+
+[tag_prefix]
+other = "tag:"
+
+[updated]
+other = "updated"

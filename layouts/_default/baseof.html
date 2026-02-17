@@ -59,18 +59,18 @@
   <!-- Breadcrumb structured data (Google SEO) -->
   {{- if not $isHome }}
   <script type="application/ld+json">
-  {{- $items := slice (dict "position" 1 "name" "Home" "item" (.Site.BaseURL | strings.TrimRight "/")) -}}
+  {{- $items := slice (dict "position" 1 "name" (T "breadcrumb_home") "item" (.Site.BaseURL | strings.TrimRight "/")) -}}
   {{- if $isBlogList -}}
-    {{- $items = $items | append (dict "position" 2 "name" "Blog" "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 2 "name" (T "breadcrumb_blog") "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
   {{- else if $isBlogPost -}}
-    {{- $items = $items | append (dict "position" 2 "name" "Blog" "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 2 "name" (T "breadcrumb_blog") "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
     {{- $items = $items | append (dict "position" 3 "name" .Title "item" (.Permalink | strings.TrimRight "/")) -}}
   {{- else if $isTagList -}}
-    {{- $items = $items | append (dict "position" 2 "name" "Blog" "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
-    {{- $items = $items | append (dict "position" 3 "name" "Tags" "item" ("tags/" | absURL | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 2 "name" (T "breadcrumb_blog") "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 3 "name" (T "breadcrumb_tags") "item" ("tags/" | absURL | strings.TrimRight "/")) -}}
   {{- else if $isTagSingle -}}
-    {{- $items = $items | append (dict "position" 2 "name" "Blog" "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
-    {{- $items = $items | append (dict "position" 3 "name" "Tags" "item" ("tags/" | absURL | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 2 "name" (T "breadcrumb_blog") "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 3 "name" (T "breadcrumb_tags") "item" ("tags/" | absURL | strings.TrimRight "/")) -}}
     {{- $items = $items | append (dict "position" 4 "name" .Title "item" (.Permalink | strings.TrimRight "/")) -}}
   {{- else -}}
     {{- $items = $items | append (dict "position" 2 "name" .Title "item" (.Permalink | strings.TrimRight "/")) -}}
@@ -121,7 +121,7 @@
           {{- end -}}
         {{- end -}}
         <span class="text-neutral-300 dark:text-neutral-600">$</span>
-        <button id="theme-toggle" class="ml-auto text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors cursor-pointer" title="Toggle theme" aria-label="Toggle theme">
+        <button id="theme-toggle" class="ml-auto text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors cursor-pointer" title="{{ T "toggle_theme" }}" aria-label="{{ T "toggle_theme" }}">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
           <svg class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
           <svg class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -168,7 +168,7 @@
           <!-- Navigation -->
           {{ with .Site.Params.nav }}
           <div class="mb-6">
-            <p class="font-mono text-xs text-neutral-300 dark:text-neutral-600 mb-2">// navigation</p>
+            <p class="font-mono text-xs text-neutral-300 dark:text-neutral-600 mb-2">// {{ T "nav_label" }}</p>
             <div class="space-y-1">
               {{ range . }}
               <a href="{{ .url }}" class="text-sm text-neutral-500 dark:text-neutral-400 hover:text-accent transition-colors block">{{ .name }}</a>
@@ -180,7 +180,7 @@
           <!-- Elsewhere -->
           {{ with .Site.Params.elsewhere }}
           <div class="mb-6">
-            <p class="font-mono text-xs text-neutral-300 dark:text-neutral-600 mb-2">// elsewhere</p>
+            <p class="font-mono text-xs text-neutral-300 dark:text-neutral-600 mb-2">// {{ T "elsewhere_label" }}</p>
             <div class="space-y-1">
               {{ range . }}
               <a href="{{ .url }}" class="text-sm text-neutral-500 dark:text-neutral-400 hover:text-accent transition-colors block">{{ .name }}</a>
@@ -192,12 +192,12 @@
           <!-- Connect -->
           {{ with .Site.Params.social }}
           <div class="mb-6">
-            <p class="font-mono text-xs text-neutral-300 dark:text-neutral-600 mb-3">// connect</p>
+            <p class="font-mono text-xs text-neutral-300 dark:text-neutral-600 mb-3">// {{ T "connect_label" }}</p>
             <div class="flex items-center gap-3">
               {{ range . }}
               <a href="{{ .url }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors no-underline" title="{{ .name }}" aria-label="{{ .name }}">{{ partial "icons/social-icon.html" (dict "icon" .icon "class" "w-[18px] h-[18px]") }}</a>
               {{ end }}
-              <a href="/blog/feed.xml" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors no-underline" title="RSS" aria-label="RSS">{{ partial "icons/social-icon.html" (dict "icon" "rss" "class" "w-[18px] h-[18px]") }}</a>
+              <a href="/blog/feed.xml" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors no-underline" title="{{ T "rss" }}" aria-label="{{ T "rss" }}">{{ partial "icons/social-icon.html" (dict "icon" "rss" "class" "w-[18px] h-[18px]") }}</a>
             </div>
           </div>
           {{ end }}
@@ -238,7 +238,7 @@
         {{ range .Site.Params.social }}
         <a href="{{ .url }}" class="text-neutral-300 dark:text-neutral-600 hover:text-accent transition-colors no-underline" title="{{ .name }}" aria-label="{{ .name }}">{{ partial "icons/social-icon.html" (dict "icon" .icon "class" "w-4 h-4") }}</a>
         {{ end }}
-        <a href="/blog/feed.xml" class="text-neutral-300 dark:text-neutral-600 hover:text-accent transition-colors no-underline" title="RSS" aria-label="RSS">{{ partial "icons/social-icon.html" (dict "icon" "rss" "class" "w-4 h-4") }}</a>
+        <a href="/blog/feed.xml" class="text-neutral-300 dark:text-neutral-600 hover:text-accent transition-colors no-underline" title="{{ T "rss" }}" aria-label="{{ T "rss" }}">{{ partial "icons/social-icon.html" (dict "icon" "rss" "class" "w-4 h-4") }}</a>
       </div>
     </div>
   </footer>
