@@ -1,0 +1,62 @@
+{{ define "title" }}{{ .Title }} &mdash; {{ .Site.Title }}{{ end }}
+
+{{ define "content" }}
+<header class="mb-12">
+  <h1 class="font-mono text-2xl md:text-3xl font-bold text-neutral-900 dark:text-neutral-100 leading-tight mb-3">{{ .Title }}</h1>
+  {{ with .Description }}
+  <p class="text-base md:text-lg text-neutral-500 dark:text-neutral-400 leading-relaxed">
+    {{ . }}
+  </p>
+  {{ end }}
+</header>
+
+{{ with .Content }}
+<div class="text-sm md:text-base leading-[1.8] text-neutral-600 dark:text-neutral-400 mb-12">
+  {{ . }}
+</div>
+{{ end }}
+
+{{- $statusOrder := slice "active" "beta" "proof of concept" "idea" "archived" -}}
+{{- $projects := .Site.Params.projects -}}
+
+{{ range $status := $statusOrder }}
+  {{- $filtered := where $projects "status" $status -}}
+  {{ if $filtered }}
+  <section class="mb-10">
+    <div class="relative mb-4">
+      {{- $labelKey := "status_active" -}}
+      {{- if eq $status "beta" }}{{ $labelKey = "status_beta" }}{{ end -}}
+      {{- if eq $status "proof of concept" }}{{ $labelKey = "status_poc" }}{{ end -}}
+      {{- if eq $status "idea" }}{{ $labelKey = "status_idea" }}{{ end -}}
+      {{- if eq $status "archived" }}{{ $labelKey = "status_archived" }}{{ end -}}
+      <span class="font-mono text-xs uppercase tracking-wider
+        {{- if eq $status "active" }} text-accent
+        {{- else if eq $status "beta" }} text-amber-500
+        {{- else if eq $status "proof of concept" }} text-violet-500
+        {{- else }} text-neutral-400 dark:text-neutral-500
+        {{- end -}}
+      ">// {{ T $labelKey }}</span>
+    </div>
+    <div class="space-y-0">
+      {{ range $filtered }}
+      <div class="py-3 border-b border-neutral-100 dark:border-neutral-800 -mx-3 px-3">
+        <div class="flex items-baseline gap-4">
+          <a href="{{ .link }}" class="font-medium text-neutral-700 dark:text-neutral-300 hover:text-accent transition-colors shrink-0{{ if eq $status "archived" }} line-through decoration-neutral-300 dark:decoration-neutral-600{{ end }}">{{ .name }}</a>
+          {{ with .description }}
+          <span class="text-sm text-neutral-400 dark:text-neutral-500 truncate hidden sm:inline">{{ . }}</span>
+          {{ end }}
+          <span class="ml-auto font-mono text-[10px] shrink-0 px-1.5 py-0.5
+            {{- if eq $status "active" }} text-accent bg-accent/10
+            {{- else if eq $status "beta" }} text-amber-500 bg-amber-500/10
+            {{- else if eq $status "proof of concept" }} text-violet-500 bg-violet-500/10
+            {{- else }} text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-800
+            {{- end -}}
+          ">{{ T $labelKey }}</span>
+        </div>
+      </div>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+{{ end }}
+{{ end }}
