@@ -39,3 +39,21 @@ other = "tag:"
 
 [updated]
 other = "updated"
+
+[projects_title]
+other = "projects"
+
+[status_active]
+other = "active"
+
+[status_beta]
+other = "beta"
+
+[status_poc]
+other = "proof of concept"
+
+[status_idea]
+other = "idea"
+
+[status_archived]
+other = "archived"
