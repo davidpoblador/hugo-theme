@@ -21,6 +21,8 @@
   --font-mono: 'Source Code Pro', monospace;
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Global font */
 * {
   font-family: var(--font-mono);
@@ -165,4 +167,34 @@ article pre code {
 article img {
   display: block;
   margin: 2rem auto;
+}
+
+/* Dark mode overrides for hardcoded colors */
+.dark .bg-site-gradient {
+  background: linear-gradient(170deg, #0f1117 0%, #141413 100%);
+}
+.dark a {
+  text-decoration-color: rgb(163 163 163 / 0.15);
+}
+.dark article h1 { color: #e5e5e5; }
+.dark article h2 { color: #d4d4d4; }
+.dark article h3 { color: #b3b3b3; }
+.dark article h4 { color: #a3a3a3; }
+.dark article h5 { color: #8a8a8a; }
+.dark article h6 { color: #808080; }
+.dark article pre,
+.dark article code {
+  background-color: #1c1c1a;
+}
+.dark article pre code {
+  background-color: transparent;
+}
+.dark article blockquote {
+  color: var(--color-neutral-400);
+}
+.dark article a {
+  text-decoration-color: rgb(96 165 250 / 0.3);
+}
+.dark article strong {
+  color: var(--color-neutral-100);
 }
