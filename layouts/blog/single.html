@@ -25,7 +25,7 @@
   <div class="absolute inset-0 bg-gradient-to-t from-neutral-900/80 to-transparent"></div>
   <div class="absolute bottom-0 left-0 right-0 p-5 md:p-8">
     <p class="font-mono text-xs text-neutral-300 mb-3">
-      <span class="bg-neutral-900/70 px-2 py-1">{{ time.Format ":date_medium" $.Date }}{{ with $.Params.updated }} &middot; updated {{ time.Format ":date_medium" . }}{{ end }}</span>
+      <span class="bg-neutral-900/70 px-2 py-1">{{ time.Format ":date_medium" $.Date }}{{ with $.Params.updated }} &middot; {{ T "updated" }} {{ time.Format ":date_medium" . }}{{ end }}</span>
     </p>
     <h1 class="font-mono text-xl md:text-3xl font-bold text-white leading-tight">
       <span class="bg-neutral-900/70 decoration-clone box-decoration-clone px-2 py-1">{{ $.Title }}</span>
@@ -36,7 +36,7 @@
 <!-- Header without Artwork -->
 <header class="mb-8">
   <p class="font-mono text-xs text-neutral-400 dark:text-neutral-500 mb-3">
-    {{ time.Format ":date_medium" .Date }}{{ with .Params.updated }} &middot; updated {{ time.Format ":date_medium" . }}{{ end }}
+    {{ time.Format ":date_medium" .Date }}{{ with .Params.updated }} &middot; {{ T "updated" }} {{ time.Format ":date_medium" . }}{{ end }}
   </p>
   <h1 class="font-mono text-2xl md:text-3xl font-bold text-neutral-900 dark:text-neutral-100 leading-tight mb-6">{{ .Title }}</h1>
 </header>
@@ -69,7 +69,7 @@
     {{ with .NextInSection }}
     <a href="{{ .RelPermalink }}" class="font-mono text-sm text-accent hover:underline">&larr; {{ .Title | truncate 30 }}</a>
     {{ else }}
-    <a href="/blog/" class="font-mono text-sm text-accent hover:underline">&larr; Back to blog</a>
+    <a href="/blog/" class="font-mono text-sm text-accent hover:underline">&larr; {{ T "back_to_blog" }}</a>
     {{ end }}
   </div>
   <div class="text-right">
