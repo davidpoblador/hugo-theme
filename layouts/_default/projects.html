@@ -42,9 +42,6 @@
       <div class="py-3 border-b border-neutral-100 dark:border-neutral-800 -mx-3 px-3">
         <div class="flex items-baseline gap-4">
           <a href="{{ .link }}" class="font-medium text-neutral-700 dark:text-neutral-300 hover:text-accent transition-colors shrink-0{{ if eq $status "archived" }} line-through decoration-neutral-300 dark:decoration-neutral-600{{ end }}">{{ .name }}</a>
-          {{ with .description }}
-          <span class="text-sm text-neutral-400 dark:text-neutral-500 truncate hidden sm:inline">{{ . }}</span>
-          {{ end }}
           <span class="ml-auto font-mono text-[10px] shrink-0 px-1.5 py-0.5
             {{- if eq $status "active" }} text-accent bg-accent/10
             {{- else if eq $status "beta" }} text-amber-500 bg-amber-500/10
@@ -53,6 +50,9 @@
             {{- end -}}
           ">{{ T $labelKey }}</span>
         </div>
+        {{ with .description }}
+        <p class="text-sm text-neutral-400 dark:text-neutral-500 mt-1">{{ . }}</p>
+        {{ end }}
       </div>
       {{ end }}
     </div>
