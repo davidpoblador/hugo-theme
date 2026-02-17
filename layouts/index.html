@@ -1,11 +1,11 @@
 {{ define "content" }}
 {{ with .Params.intro }}
-<p class="text-xl md:text-2xl font-medium leading-relaxed text-neutral-800 mb-12">
+<p class="text-xl md:text-2xl font-medium leading-relaxed text-neutral-800 dark:text-neutral-200 mb-12">
   {{ . }}
 </p>
 {{ end }}
 
-<article class="text-sm md:text-base leading-[1.8] text-neutral-600">
+<article class="text-sm md:text-base leading-[1.8] text-neutral-600 dark:text-neutral-400">
   {{ .Content }}
 </article>
 {{ end }}

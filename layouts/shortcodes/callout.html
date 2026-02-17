@@ -1,4 +1,4 @@
-<div class="my-10 pl-4 border-l-2 {{ if eq (.Get "border") "blue" }}border-accent{{ else }}border-neutral-200{{ end }}">
-  <p class="text-xs text-neutral-400 mb-2">// {{ .Get "label" }}</p>
-  <div class="text-neutral-600">{{ .Inner | markdownify }}</div>
+<div class="my-10 pl-4 border-l-2 {{ if eq (.Get "border") "blue" }}border-accent{{ else }}border-neutral-200 dark:border-neutral-700{{ end }}">
+  <p class="text-xs text-neutral-400 dark:text-neutral-500 mb-2">// {{ .Get "label" }}</p>
+  <div class="text-neutral-600 dark:text-neutral-400">{{ .Inner | markdownify }}</div>
 </div>
