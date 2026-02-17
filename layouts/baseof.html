@@ -24,9 +24,9 @@
   <meta property="og:description" content="{{ block "og_description" . }}{{ .Site.Params.description }}{{ end }}">
   <meta property="og:type" content="{{ block "og_type" . }}website{{ end }}">
   <meta property="og:url" content="{{ replace .Permalink "/index.html" "/" }}">
-  <meta property="og:image" content="{{ block "og_image" . }}{{ .Site.Params.photo | absURL }}{{ end }}">
+  <meta property="og:image" content="{{ block "og_image" . }}{{ ((.Site.Params.ogImage) | default .Site.Params.photo) | absURL }}{{ end }}">
   <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   {{- with .Site.Params.twitter }}
   <meta name="twitter:site" content="{{ . }}">
   {{- end }}
