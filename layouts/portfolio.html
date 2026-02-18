@@ -15,27 +15,21 @@
 {{ end }}
 
 {{- $items := sort (.Site.Params.portfolio | default slice) "date" "desc" -}}
-{{- $years := slice -}}
-{{- range $items -}}
+{{- $prevYear := "" -}}
+{{ range $items }}
   {{- $year := substr .date 0 4 -}}
-  {{- if not (in $years $year) -}}
-    {{- $years = append $years $year -}}
-  {{- end -}}
-{{- end -}}
-
-{{ range $year := $years }}
-{{- $yearItems := slice -}}
-{{- range $items -}}
-  {{- if eq (substr .date 0 4) $year -}}
-    {{- $yearItems = append $yearItems . -}}
-  {{- end -}}
-{{- end -}}
+  {{- if ne $year $prevYear -}}
+    {{- if ne $prevYear "" }}
+  </div>
+</section>
+    {{- end }}
+    {{- $prevYear = $year }}
 <section class="mb-14">
   <div class="relative mb-6">
     <span class="text-4xl md:text-5xl font-bold text-neutral-200 dark:text-neutral-800 font-mono select-none">{{ $year }}</span>
   </div>
   <div class="space-y-0">
-    {{ range $yearItems }}
+  {{- end }}
     <div class="py-3 border-b border-neutral-100 dark:border-neutral-800 -mx-3 px-3">
       <div class="flex items-baseline gap-4">
         {{- $dateStr := .date -}}
@@ -70,8 +64,9 @@
       </div>
       {{ end }}
     </div>
-    {{ end }}
+{{ end }}
+{{- if ne $prevYear "" }}
   </div>
 </section>
-{{ end }}
+{{- end }}
 {{ end }}
