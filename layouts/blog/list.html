@@ -13,6 +13,10 @@
   {{ end }}
 </header>
 
+{{ with .Content }}
+<div class="text-sm md:text-base leading-[1.8] text-neutral-600 dark:text-neutral-400 mb-12">{{ . }}</div>
+{{ end }}
+
 {{ range .Pages.GroupByDate "2006" }}
 <section class="mb-14">
   <div class="relative mb-6">
