@@ -2,7 +2,11 @@
 <html lang="{{ .Site.LanguageCode | default "en" }}">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  {{- with .Site.Params.themeColor }}
+  <meta name="theme-color" content="{{ . }}" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)">
+  {{- end }}
   <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
   <meta name="description" content="{{ block "meta_description" . }}{{ .Site.Params.description }}{{ end }}">
   {{- with .Params.noindex }}
