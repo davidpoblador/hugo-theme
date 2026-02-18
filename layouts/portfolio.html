@@ -14,7 +14,7 @@
 <div class="text-sm md:text-base leading-[1.8] text-neutral-600 dark:text-neutral-400 mb-12">{{ . }}</div>
 {{ end }}
 
-{{- $items := collections.Reverse (sort (.Site.Params.portfolio | default slice) "date") -}}
+{{- $items := .Site.Params.portfolio | default slice -}}
 {{- $prevYear := "" -}}
 {{ range $items }}
   {{- $year := substr .date 0 4 -}}
