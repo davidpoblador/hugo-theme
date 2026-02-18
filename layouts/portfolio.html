@@ -39,7 +39,13 @@
         {{- else -}}
           <span class="w-12 shrink-0"></span>
         {{- end -}}
+        {{- $firstLink := "" -}}
+        {{- with .links -}}{{- $firstLink = (index . 0).url -}}{{- end -}}
+        {{- if $firstLink }}
+        <a href="{{ $firstLink }}" class="flex-1 font-medium text-neutral-700 dark:text-neutral-300 hover:text-accent transition-colors min-w-0">{{ .title }}</a>
+        {{- else }}
         <span class="flex-1 font-medium text-neutral-700 dark:text-neutral-300 min-w-0">{{ .title }}</span>
+        {{- end -}}
         <span class="shrink-0 font-mono text-[10px] px-1.5 py-0.5
           {{- if eq .type "talk" }} text-accent bg-accent/10
           {{- else if eq .type "media" }} text-amber-500 bg-amber-500/10
