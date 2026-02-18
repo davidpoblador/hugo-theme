@@ -247,7 +247,7 @@
         {{ range .Site.Params.social }}
         <a href="{{ .url }}" class="text-neutral-300 dark:text-neutral-600 hover:text-accent transition-colors no-underline" title="{{ .name }}" aria-label="{{ .name }}">{{ partial "icons/social-icon.html" (dict "icon" .icon "class" "w-4 h-4") }}</a>
         {{ end }}
-        <a href="/blog/feed.xml" class="text-neutral-300 dark:text-neutral-600 hover:text-accent transition-colors no-underline" title="{{ T "rss" }}" aria-label="{{ T "rss" }}">{{ partial "icons/social-icon.html" (dict "icon" "rss" "class" "w-4 h-4") }}</a>
+        <span class="relative inline-flex items-center"><button onclick="navigator.clipboard.writeText('{{ `blog/feed.xml` | absURL }}').then(()=>{const s=this.nextElementSibling;s.classList.remove('opacity-0');setTimeout(()=>s.classList.add('opacity-0'),1500)})" title="{{ T "copy_rss_url" }}" aria-label="{{ T "copy_rss_url" }}" class="text-neutral-300 dark:text-neutral-600 hover:text-accent transition-colors cursor-pointer">{{ partial "icons/social-icon.html" (dict "icon" "rss" "class" "w-4 h-4") }}</button><span class="opacity-0 transition-opacity duration-300 absolute left-full ml-2 font-mono text-xs text-neutral-400 dark:text-neutral-500 whitespace-nowrap">{{ T "copied" }}</span></span>
       </div>
     </div>
   </footer>
