@@ -1,0 +1,77 @@
+[breadcrumb_home]
+other = "Hem"
+
+[breadcrumb_blog]
+other = "Blogg"
+
+[breadcrumb_tags]
+other = "Taggar"
+
+[toggle_theme]
+other = "Byt tema"
+
+[nav_label]
+other = "navigering"
+
+[elsewhere_label]
+other = "på andra håll"
+
+[connect_label]
+other = "kontakt"
+
+[rss]
+other = "RSS"
+
+[back_to_blog]
+other = "Tillbaka till bloggen"
+
+[copied]
+other = "kopierad!"
+
+[copy_rss_url]
+other = "Kopiera RSS-flödes-URL"
+
+[tags_title]
+other = "taggar"
+
+[tag_prefix]
+other = "tagg:"
+
+[updated]
+other = "uppdaterad"
+
+[projects_title]
+other = "projekt"
+
+[status_active]
+other = "aktiv"
+
+[status_beta]
+other = "beta"
+
+[status_poc]
+other = "koncepttest"
+
+[status_idea]
+other = "idé"
+
+[status_archived]
+other = "arkiverad"
+
+[portfolio_talk]
+other = "föredrag"
+
+[portfolio_media]
+other = "media"
+
+[portfolio_press]
+other = "press"
+
+[portfolio_podcast]
+other = "podd"
+
+[portfolio_writing]
+other = "skrift"
+
+[portfolio_event]
+other = "evenemang"

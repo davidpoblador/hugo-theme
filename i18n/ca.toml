@@ -1,0 +1,77 @@
+[breadcrumb_home]
+other = "Inici"
+
+[breadcrumb_blog]
+other = "Blog"
+
+[breadcrumb_tags]
+other = "Etiquetes"
+
+[toggle_theme]
+other = "Canviar tema"
+
+[nav_label]
+other = "navegació"
+
+[elsewhere_label]
+other = "a altres llocs"
+
+[connect_label]
+other = "connectar"
+
+[rss]
+other = "RSS"
+
+[back_to_blog]
+other = "Tornar al blog"
+
+[copied]
+other = "copiat!"
+
+[copy_rss_url]
+other = "Copiar URL del feed RSS"
+
+[tags_title]
+other = "etiquetes"
+
+[tag_prefix]
+other = "etiqueta:"
+
+[updated]
+other = "actualitzat"
+
+[projects_title]
+other = "projectes"
+
+[status_active]
+other = "actiu"
+
+[status_beta]
+other = "beta"
+
+[status_poc]
+other = "prova de concepte"
+
+[status_idea]
+other = "idea"
+
+[status_archived]
+other = "arxivat"
+
+[portfolio_talk]
+other = "xerrada"
+
+[portfolio_media]
+other = "mèdia"
+
+[portfolio_press]
+other = "premsa"
+
+[portfolio_podcast]
+other = "podcast"
+
+[portfolio_writing]
+other = "escriptura"
+
+[portfolio_event]
+other = "esdeveniment"

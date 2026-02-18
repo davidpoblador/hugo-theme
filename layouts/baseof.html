@@ -130,21 +130,34 @@
           {{- end -}}
         {{- end -}}
         <span class="text-neutral-300 dark:text-neutral-600">$</span>
-        {{- range .Site.Params.alternates -}}
-          {{- if and (ne .hreflang $.Site.LanguageCode) (ne .hreflang "x-default") -}}
-            {{- $base := strings.TrimRight "/" .href -}}
+        {{- $isBlogRelated := or $isBlogPost $isBlogList $isTagList $isTagSingle -}}
+        {{- $langFirst := true -}}
+        {{- range $alt := .Site.Params.alternates -}}
+          {{- if and (ne $alt.hreflang $.Site.LanguageCode) (ne $alt.hreflang "x-default") -}}
+            {{- $base := strings.TrimRight "/" $alt.href -}}
+            {{- $noBlog := $alt.noBlog -}}
             {{- $altPath := "" -}}
-            {{- with $.Params.langUrl -}}
-              {{- $altPath = . -}}
-            {{- else -}}
+            {{- $pageLangUrl := $.Params.langUrl -}}
+            {{- if $pageLangUrl -}}
+              {{- if reflect.IsMap $pageLangUrl -}}
+                {{- with index $pageLangUrl $alt.hreflang -}}
+                  {{- $altPath = . -}}
+                {{- end -}}
+              {{- else -}}
+                {{- $altPath = $pageLangUrl -}}
+              {{- end -}}
+            {{- end -}}
+            {{- if not $altPath -}}
               {{- $relPath := replace $.RelPermalink "/index.html" "/" -}}
-              {{- if $isBlogPost -}}
+              {{- if and $isBlogRelated $noBlog -}}
+                {{- $altPath = "" -}}
+              {{- else if $isBlogPost -}}
                 {{- $altPath = "/blog/" -}}
               {{- else if ne $relPath "/" -}}
                 {{- $altPath = $relPath -}}
               {{- end -}}
             {{- end }}
-        <a href="{{ $base }}{{ $altPath }}" class="ml-auto font-mono text-xs leading-none text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors no-underline uppercase">{{ .hreflang }}</a>
+        <a href="{{ $base }}{{ $altPath }}" class="{{ if $langFirst }}ml-auto {{ $langFirst = false }}{{ else }}ml-2 {{ end }}font-mono text-xs leading-none text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors no-underline uppercase">{{ $alt.hreflang }}</a>
           {{- end -}}
         {{- end }}
         <button id="theme-toggle" class="ml-4 text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors cursor-pointer" title="{{ T "toggle_theme" }}" aria-label="{{ T "toggle_theme" }}">

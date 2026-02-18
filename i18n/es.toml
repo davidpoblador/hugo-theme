@@ -1,0 +1,77 @@
+[breadcrumb_home]
+other = "Inicio"
+
+[breadcrumb_blog]
+other = "Blog"
+
+[breadcrumb_tags]
+other = "Etiquetas"
+
+[toggle_theme]
+other = "Cambiar tema"
+
+[nav_label]
+other = "navegación"
+
+[elsewhere_label]
+other = "en otros sitios"
+
+[connect_label]
+other = "conectar"
+
+[rss]
+other = "RSS"
+
+[back_to_blog]
+other = "Volver al blog"
+
+[copied]
+other = "¡copiado!"
+
+[copy_rss_url]
+other = "Copiar URL del feed RSS"
+
+[tags_title]
+other = "etiquetas"
+
+[tag_prefix]
+other = "etiqueta:"
+
+[updated]
+other = "actualizado"
+
+[projects_title]
+other = "proyectos"
+
+[status_active]
+other = "activo"
+
+[status_beta]
+other = "beta"
+
+[status_poc]
+other = "prueba de concepto"
+
+[status_idea]
+other = "idea"
+
+[status_archived]
+other = "archivado"
+
+[portfolio_talk]
+other = "charla"
+
+[portfolio_media]
+other = "medios"
+
+[portfolio_press]
+other = "prensa"
+
+[portfolio_podcast]
+other = "podcast"
+
+[portfolio_writing]
+other = "escritura"
+
+[portfolio_event]
+other = "evento"
