@@ -126,8 +126,20 @@
         {{- end -}}
         <span class="text-neutral-300 dark:text-neutral-600">$</span>
         {{- range .Site.Params.alternates -}}
-          {{- if and (ne .hreflang $.Site.LanguageCode) (ne .hreflang "x-default") }}
-        <a href="{{ .href }}" class="ml-auto font-mono text-xs leading-none text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors no-underline uppercase">{{ .hreflang }}</a>
+          {{- if and (ne .hreflang $.Site.LanguageCode) (ne .hreflang "x-default") -}}
+            {{- $base := strings.TrimRight "/" .href -}}
+            {{- $altPath := "" -}}
+            {{- with $.Params.langUrl -}}
+              {{- $altPath = . -}}
+            {{- else -}}
+              {{- $relPath := replace $.RelPermalink "/index.html" "/" -}}
+              {{- if $isBlogPost -}}
+                {{- $altPath = "/blog/" -}}
+              {{- else if ne $relPath "/" -}}
+                {{- $altPath = $relPath -}}
+              {{- end -}}
+            {{- end }}
+        <a href="{{ $base }}{{ $altPath }}" class="ml-auto font-mono text-xs leading-none text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors no-underline uppercase">{{ .hreflang }}</a>
           {{- end -}}
         {{- end }}
         <button id="theme-toggle" class="ml-4 text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors cursor-pointer" title="{{ T "toggle_theme" }}" aria-label="{{ T "toggle_theme" }}">
