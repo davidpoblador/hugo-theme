@@ -1,4 +1,7 @@
 {{ define "title" }}{{ .Title }} &mdash; {{ .Site.Title }}{{ end }}
+{{ define "meta_description" }}{{ .Description | default .Site.Params.description }}{{ end }}
+{{ define "og_title" }}{{ .Title }}{{ end }}
+{{ define "og_description" }}{{ .Description | default .Site.Params.description }}{{ end }}
 
 {{ define "content" }}
 <header class="mb-12">

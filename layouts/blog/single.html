@@ -5,6 +5,53 @@
 {{ define "og_type" }}article{{ end }}
 {{ define "og_image" }}{{ with .Resources.GetMatch "artwork.*" }}{{ (.Fill "1200x630 jpg q85").Permalink }}{{ else }}{{ .Site.Params.photo | absURL }}{{ end }}{{ end }}
 
+{{ define "extra_meta" }}
+  <meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+  {{- with .Params.updated }}
+  <meta property="article:modified_time" content="{{ time.AsTime . | time.Format "2006-01-02T15:04:05Z07:00" }}">
+  {{- end }}
+  <meta property="article:author" content="{{ .Site.Title }}">
+  {{- range .GetTerms "tags" }}
+  <meta property="article:tag" content="{{ .LinkTitle }}">
+  {{- end }}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": {{ .Title | jsonify }},
+    "datePublished": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
+    {{- with .Params.updated }}
+    "dateModified": "{{ time.AsTime . | time.Format "2006-01-02T15:04:05Z07:00" }}",
+    {{- end }}
+    "author": {
+      "@type": "Person",
+      "name": {{ $.Site.Title | jsonify }},
+      "url": {{ $.Site.BaseURL | strings.TrimRight "/" | jsonify }}
+    },
+    {{- with .Description }}
+    "description": {{ . | jsonify }},
+    {{- end }}
+    "publisher": {
+      "@type": "Person",
+      "name": {{ $.Site.Title | jsonify }}
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": {{ replace .Permalink "/index.html" "/" | jsonify }}
+    }
+    {{- with $.Resources.GetMatch "artwork.*" -}}
+    ,
+    "image": {
+      "@type": "ImageObject",
+      "url": {{ (.Fill "1200x630 jpg q85").Permalink | jsonify }},
+      "width": 1200,
+      "height": 630
+    }
+    {{- end }}
+  }
+  </script>
+{{ end }}
+
 {{ define "content" }}
 {{ $artwork := .Resources.GetMatch "artwork.*" }}
 {{ with $artwork }}
