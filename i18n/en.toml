@@ -57,3 +57,21 @@ other = "idea"
 
 [status_archived]
 other = "archived"
+
+[portfolio_talk]
+other = "talk"
+
+[portfolio_media]
+other = "media"
+
+[portfolio_press]
+other = "press"
+
+[portfolio_podcast]
+other = "podcast"
+
+[portfolio_writing]
+other = "writing"
+
+[portfolio_event]
+other = "event"

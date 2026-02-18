@@ -1,0 +1,78 @@
+{{ define "title" }}{{ .Title }} &mdash; {{ .Site.Title }}{{ end }}
+
+{{ define "content" }}
+<header class="mb-12">
+  <h1 class="font-mono text-2xl md:text-3xl font-bold text-neutral-900 dark:text-neutral-100 leading-tight mb-3">{{ .Title }}</h1>
+  {{ with .Description }}
+  <p class="text-base md:text-lg text-neutral-500 dark:text-neutral-400 leading-relaxed">
+    {{ . }}
+  </p>
+  {{ end }}
+</header>
+
+{{ with .Content }}
+<div class="text-sm md:text-base leading-[1.8] text-neutral-600 dark:text-neutral-400 mb-12">{{ . }}</div>
+{{ end }}
+
+{{- $items := .Site.Params.portfolio | default slice -}}
+{{- $prevYear := "" -}}
+{{ range $items }}
+  {{- $year := substr .date 0 4 -}}
+  {{- if ne $year $prevYear -}}
+    {{- if ne $prevYear "" }}
+  </div>
+</section>
+    {{- end }}
+    {{- $prevYear = $year }}
+<section class="mb-14">
+  <div class="relative mb-6">
+    <span class="text-4xl md:text-5xl font-bold text-neutral-200 dark:text-neutral-800 font-mono select-none">{{ $year }}</span>
+  </div>
+  <div class="space-y-0">
+  {{- end }}
+    <div class="py-3 border-b border-neutral-100 dark:border-neutral-800 -mx-3 px-3">
+      <div class="flex items-baseline gap-4">
+        {{- $dateStr := .date -}}
+        {{- if gt (len $dateStr) 4 -}}
+          {{- $t := time (printf "%s-01" $dateStr) -}}
+          <span class="font-mono text-sm text-neutral-400 dark:text-neutral-500 w-12 shrink-0 tabular-nums">{{ $t.Format "Jan" }}</span>
+        {{- else -}}
+          <span class="w-12 shrink-0"></span>
+        {{- end -}}
+        {{- $firstLink := "" -}}
+        {{- with .links -}}{{- $firstLink = (index . 0).url -}}{{- end -}}
+        {{- if $firstLink }}
+        <a href="{{ $firstLink }}" class="flex-1 font-medium text-neutral-700 dark:text-neutral-300 hover:text-accent transition-colors min-w-0">{{ .title }}</a>
+        {{- else }}
+        <span class="flex-1 font-medium text-neutral-700 dark:text-neutral-300 min-w-0">{{ .title }}</span>
+        {{- end -}}
+        <span class="shrink-0 font-mono text-[10px] px-1.5 py-0.5
+          {{- if eq .type "talk" }} text-accent bg-accent/10
+          {{- else if eq .type "media" }} text-amber-500 bg-amber-500/10
+          {{- else if eq .type "press" }} text-violet-500 bg-violet-500/10
+          {{- else if eq .type "podcast" }} text-emerald-500 bg-emerald-500/10
+          {{- else if eq .type "writing" }} text-sky-500 bg-sky-500/10
+          {{- else if eq .type "event" }} text-rose-500 bg-rose-500/10
+          {{- end -}}
+        ">{{ T (printf "portfolio_%s" .type) }}</span>
+        <span class="shrink-0 font-mono text-[10px] px-1.5 py-0.5 text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-800 uppercase">{{ .lang }}</span>
+      </div>
+      {{ with .outlet }}
+      <div class="ml-16 mt-0.5">
+        <span class="text-sm text-neutral-400 dark:text-neutral-500">{{ . }}</span>
+      </div>
+      {{ end }}
+      {{ with .links }}
+      <div class="ml-16 mt-1 flex flex-wrap gap-x-3 gap-y-1">
+        {{ range . }}
+        <a href="{{ .url }}" class="font-mono text-[11px] text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors">{{ with .title }}{{ . }}{{ else }}link{{ end }}</a>
+        {{ end }}
+      </div>
+      {{ end }}
+    </div>
+{{ end }}
+{{- if ne $prevYear "" }}
+  </div>
+</section>
+{{- end }}
+{{ end }}
