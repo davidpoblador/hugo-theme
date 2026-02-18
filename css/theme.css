@@ -23,6 +23,11 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Prevent pull-to-refresh on mobile */
+html {
+  overscroll-behavior: none;
+}
+
 /* Global font */
 * {
   font-family: var(--font-mono);
