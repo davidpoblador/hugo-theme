@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   {{- with .Site.Params.themeColor }}
   <meta name="theme-color" content="{{ . }}" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="{{ $.Site.Params.themeColorDark | default . }}" media="(prefers-color-scheme: dark)">
   {{- end }}
   <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
   <meta name="description" content="{{ block "meta_description" . }}{{ .Site.Params.description }}{{ end }}">
@@ -102,7 +102,7 @@
   {{- end }}
 </head>
 
-<body class="bg-accent dark:bg-[#0f1117] flex flex-col min-h-screen text-neutral-800 dark:text-neutral-200 antialiased">
+<body class="bg-accent dark:bg-accent-dark flex flex-col min-h-screen text-neutral-800 dark:text-neutral-200 antialiased">
 <div class="bg-site-gradient flex-1 flex flex-col">
 
   <!-- Sticky Top Bar -->
