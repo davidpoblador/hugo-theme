@@ -3,6 +3,35 @@
 {{ define "og_title" }}{{ .Title }}{{ end }}
 {{ define "og_description" }}{{ .Description | default .Site.Params.description }}{{ end }}
 
+{{ define "extra_meta" }}
+  {{- $items := .Site.Params.portfolio | default slice -}}
+  {{ if $items }}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": {{ .Title | jsonify }},
+    "numberOfItems": {{ len $items }},
+    "itemListElement": [
+      {{- range $i, $item := $items }}{{ if $i }},{{ end }}
+      {
+        "@type": "ListItem",
+        "position": {{ add $i 1 }},
+        "name": {{ $item.title | jsonify }}
+        {{- with $item.links -}}
+          {{- with index . 0 -}}
+        ,
+        "url": {{ .url | jsonify }}
+          {{- end -}}
+        {{- end }}
+      }
+      {{- end }}
+    ]
+  }
+  </script>
+  {{ end }}
+{{ end }}
+
 {{ define "content" }}
 <header class="mb-12">
   <h1 class="font-mono text-2xl md:text-3xl font-bold text-neutral-900 dark:text-neutral-100 leading-tight mb-3">{{ .Title }}</h1>
