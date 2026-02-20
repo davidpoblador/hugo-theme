@@ -20,10 +20,6 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="preload" href="/s/fonts/source-code-pro-latin.woff2" as="font" type="font/woff2" crossorigin>
-  {{- with .Site.Params.analyticsSrc }}
-  {{- $u := urls.Parse . }}
-  <link rel="preconnect" href="{{ $u.Scheme }}://{{ $u.Host }}">
-  {{- end }}
   <!-- OpenGraph -->
   <meta property="og:site_name" content="{{ .Site.Title }}">
   <meta property="og:title" content="{{ block "og_title" . }}{{ .Site.Title }}{{ end }}">
@@ -42,7 +38,7 @@
     (function(){var t=localStorage.getItem('theme');if(t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')})();
   </script>
   {{- $css := resources.Get "s/css/style.css" -}}
-  <link rel="stylesheet" href="{{ $css.RelPermalink }}?v={{ $css.Content | md5 }}">
+  <style>{{ $css.Content | safeCSS }}</style>
   {{- $js := resources.Get "s/js/main.js" -}}
   <script src="{{ $js.RelPermalink }}?v={{ $js.Content | md5 }}" type="module"></script>
   {{- with .Site.Params.analyticsID }}
