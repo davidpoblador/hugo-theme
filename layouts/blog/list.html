@@ -3,6 +3,32 @@
 {{ define "og_title" }}{{ .Title }}{{ end }}
 {{ define "og_description" }}{{ .Description | default .Site.Params.description }}{{ end }}
 
+{{ define "extra_meta" }}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": "{{ "blog/" | absURL }}#blog",
+    "name": {{ .Title | jsonify }},
+    {{- with .Description }}
+    "description": {{ . | jsonify }},
+    {{- end }}
+    "url": {{ replace .Permalink "/index.html" "/" | jsonify }},
+    "author": { "@id": "{{ .Site.BaseURL }}#person" },
+    "blogPost": [
+      {{- range $i, $page := .Pages }}{{ if $i }},{{ end }}
+      {
+        "@type": "BlogPosting",
+        "headline": {{ $page.Title | jsonify }},
+        "datePublished": "{{ $page.Date.Format "2006-01-02T15:04:05Z07:00" }}",
+        "url": {{ replace $page.Permalink "/index.html" "/" | jsonify }}
+      }
+      {{- end }}
+    ]
+  }
+  </script>
+{{ end }}
+
 {{ define "content" }}
 <header class="mb-12">
   <h1 class="font-mono text-2xl md:text-3xl font-bold text-neutral-900 dark:text-neutral-100 leading-tight mb-3 flex items-center gap-3">{{ .Title }} <span class="relative inline-flex items-center"><button onclick="navigator.clipboard.writeText('{{ `blog/feed.xml` | absURL }}').then(()=>{const s=this.nextElementSibling;s.classList.remove('opacity-0');setTimeout(()=>s.classList.add('opacity-0'),1500)})" title="{{ T "copy_rss_url" }}" class="text-neutral-300 dark:text-neutral-600 hover:text-accent transition-colors cursor-pointer">{{ partial "icons/social-icon.html" (dict "icon" "rss" "class" "w-5 h-5") }}</button><span class="opacity-0 transition-opacity duration-300 absolute left-full ml-2 font-mono text-xs text-neutral-400 dark:text-neutral-500 whitespace-nowrap font-normal">{{ T "copied" }}</span></span></h1>

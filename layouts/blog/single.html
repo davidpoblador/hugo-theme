@@ -3,7 +3,7 @@
 {{ define "og_title" }}{{ .Title }}{{ end }}
 {{ define "og_description" }}{{ .Description | default .Site.Params.description }}{{ end }}
 {{ define "og_type" }}article{{ end }}
-{{ define "og_image" }}{{ with .Resources.GetMatch "artwork.*" }}{{ (.Fill "1200x630 jpg q85").Permalink }}{{ else }}{{ .Site.Params.photo | absURL }}{{ end }}{{ end }}
+{{ define "og_image" }}{{ with .Resources.GetMatch "artwork.*" }}{{ (.Fill "1200x630 jpg q85").Permalink }}{{ else }}{{- $fallback := resources.Get (printf "s/img/%s" .Site.Params.photo) -}}{{ $fallback.Permalink }}?v={{ $fallback.Content | md5 }}{{ end }}{{ end }}
 
 {{ define "extra_meta" }}
   <meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
@@ -17,28 +17,22 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     "headline": {{ .Title | jsonify }},
     "datePublished": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
     {{- with .Params.updated }}
     "dateModified": "{{ time.AsTime . | time.Format "2006-01-02T15:04:05Z07:00" }}",
     {{- end }}
-    "author": {
-      "@type": "Person",
-      "name": {{ $.Site.Title | jsonify }},
-      "url": {{ $.Site.BaseURL | strings.TrimRight "/" | jsonify }}
-    },
+    "author": { "@id": "{{ $.Site.BaseURL }}#person" },
+    "publisher": { "@id": "{{ $.Site.BaseURL }}#person" },
     {{- with .Description }}
     "description": {{ . | jsonify }},
     {{- end }}
-    "publisher": {
-      "@type": "Person",
-      "name": {{ $.Site.Title | jsonify }}
-    },
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": {{ replace .Permalink "/index.html" "/" | jsonify }}
-    }
+    },
+    "isPartOf": { "@id": "{{ "blog/" | absURL }}#blog" }
     {{- with $.Resources.GetMatch "artwork.*" -}}
     ,
     "image": {
@@ -47,6 +41,14 @@
       "width": 1200,
       "height": 630
     }
+    {{- end }}
+    {{- with $.GetTerms "tags" -}}
+    ,
+    "keywords": [
+      {{- range $i, $tag := . }}{{ if $i }},{{ end }}
+      {{ $tag.LinkTitle | jsonify }}
+      {{- end }}
+    ]
     {{- end }}
   }
   </script>
