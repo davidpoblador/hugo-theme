@@ -18,7 +18,7 @@
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": {{ .Title | jsonify }},
+    "headline": {{ .Title | jsonify | safeJS }},
     "datePublished": "{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}",
     {{- with .Params.updated }}
     "dateModified": "{{ time.AsTime . | time.Format "2006-01-02T15:04:05Z07:00" }}",
@@ -26,18 +26,18 @@
     "author": { "@id": "{{ $.Site.BaseURL }}#person" },
     "publisher": { "@id": "{{ $.Site.BaseURL }}#person" },
     {{- with .Description }}
-    "description": {{ . | jsonify }},
+    "description": {{ . | jsonify | safeJS }},
     {{- end }}
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": {{ replace .Permalink "/index.html" "/" | jsonify }}
+      "@id": {{ replace .Permalink "/index.html" "/" | jsonify | safeJS }}
     },
     "isPartOf": { "@id": "{{ "blog/" | absURL }}#blog" }
     {{- with $.Resources.GetMatch "artwork.*" -}}
     ,
     "image": {
       "@type": "ImageObject",
-      "url": {{ (.Fill "1200x630 jpg q85").Permalink | jsonify }},
+      "url": {{ (.Fill "1200x630 jpg q85").Permalink | jsonify | safeJS }},
       "width": 1200,
       "height": 630
     }
@@ -46,7 +46,7 @@
     ,
     "keywords": [
       {{- range $i, $tag := . }}{{ if $i }},{{ end }}
-      {{ $tag.LinkTitle | jsonify }}
+      {{ $tag.LinkTitle | jsonify | safeJS }}
       {{- end }}
     ]
     {{- end }}

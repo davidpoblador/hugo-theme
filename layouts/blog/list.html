@@ -9,19 +9,19 @@
     "@context": "https://schema.org",
     "@type": "Blog",
     "@id": "{{ "blog/" | absURL }}#blog",
-    "name": {{ .Title | jsonify }},
+    "name": {{ .Title | jsonify | safeJS }},
     {{- with .Description }}
-    "description": {{ . | jsonify }},
+    "description": {{ . | jsonify | safeJS }},
     {{- end }}
-    "url": {{ replace .Permalink "/index.html" "/" | jsonify }},
+    "url": {{ replace .Permalink "/index.html" "/" | jsonify | safeJS }},
     "author": { "@id": "{{ .Site.BaseURL }}#person" },
     "blogPost": [
       {{- range $i, $page := .Pages }}{{ if $i }},{{ end }}
       {
         "@type": "BlogPosting",
-        "headline": {{ $page.Title | jsonify }},
+        "headline": {{ $page.Title | jsonify | safeJS }},
         "datePublished": "{{ $page.Date.Format "2006-01-02T15:04:05Z07:00" }}",
-        "url": {{ replace $page.Permalink "/index.html" "/" | jsonify }}
+        "url": {{ replace $page.Permalink "/index.html" "/" | jsonify | safeJS }}
       }
       {{- end }}
     ]
