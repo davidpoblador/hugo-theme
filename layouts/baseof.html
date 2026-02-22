@@ -162,7 +162,7 @@
   <!-- Sticky Top Bar -->
   <div class="lg:sticky lg:top-0 z-50 bg-white/80 dark:bg-neutral-900/80 lg:backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-700">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <div class="flex items-center h-10 font-mono text-sm text-neutral-400 dark:text-neutral-500">
+      <div class="flex items-center h-12 font-mono text-sm text-neutral-400 dark:text-neutral-500">
         {{- if $isHome -}}
           <span class="text-neutral-700 dark:text-neutral-300 font-medium"><span class="hidden sm:inline">{{ .Site.Params.domain }}:</span>~</span>
         {{- else -}}
@@ -211,11 +211,11 @@
                 {{- $altPath = $relPath -}}
               {{- end -}}
             {{- end }}
-        <a href="{{ $base }}{{ $altPath }}" hreflang="{{ $alt.hreflang }}" lang="{{ $alt.hreflang }}" class="font-mono text-xs leading-none text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors no-underline uppercase min-h-12 min-w-12 lg:min-h-0 lg:min-w-0 inline-flex items-center justify-center">{{ $alt.hreflang }}</a>
+        <a href="{{ $base }}{{ $altPath }}" hreflang="{{ $alt.hreflang }}" lang="{{ $alt.hreflang }}" class="font-mono text-xs leading-none text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors no-underline uppercase min-h-12 min-w-12 inline-flex items-center justify-center">{{ $alt.hreflang }}</a>
           {{- end -}}
         {{- end }}
         </span>
-        <button id="theme-toggle" class="ml-4 text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors cursor-pointer min-h-12 min-w-12 lg:min-h-0 lg:min-w-0 inline-flex items-center justify-center" title="{{ T "toggle_theme" }}" aria-label="{{ T "toggle_theme" }}">
+        <button id="theme-toggle" class="ml-4 text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors cursor-pointer min-h-12 min-w-12 inline-flex items-center justify-center" title="{{ T "toggle_theme" }}" aria-label="{{ T "toggle_theme" }}">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
           <svg class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
           <svg class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
