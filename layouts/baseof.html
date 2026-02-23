@@ -66,21 +66,21 @@
   <!-- Breadcrumb structured data (Google SEO) -->
   {{- if not $isHome }}
   <script type="application/ld+json">
-  {{- $items := slice (dict "position" 1 "name" (T "breadcrumb_home") "item" (.Site.BaseURL | strings.TrimRight "/")) -}}
+  {{- $items := slice (dict "position" 1 "name" (T "breadcrumb_home") "item" .Site.BaseURL) -}}
   {{- if $isBlogList -}}
-    {{- $items = $items | append (dict "position" 2 "name" (T "breadcrumb_blog") "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 2 "name" (T "breadcrumb_blog") "item" ("blog/" | absURL)) -}}
   {{- else if $isBlogPost -}}
-    {{- $items = $items | append (dict "position" 2 "name" (T "breadcrumb_blog") "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
-    {{- $items = $items | append (dict "position" 3 "name" .Title "item" (.Permalink | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 2 "name" (T "breadcrumb_blog") "item" ("blog/" | absURL)) -}}
+    {{- $items = $items | append (dict "position" 3 "name" .Title "item" .Permalink) -}}
   {{- else if $isTagList -}}
-    {{- $items = $items | append (dict "position" 2 "name" (T "breadcrumb_blog") "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
-    {{- $items = $items | append (dict "position" 3 "name" (T "breadcrumb_tags") "item" ("tags/" | absURL | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 2 "name" (T "breadcrumb_blog") "item" ("blog/" | absURL)) -}}
+    {{- $items = $items | append (dict "position" 3 "name" (T "breadcrumb_tags") "item" ("tags/" | absURL)) -}}
   {{- else if $isTagSingle -}}
-    {{- $items = $items | append (dict "position" 2 "name" (T "breadcrumb_blog") "item" ("blog/" | absURL | strings.TrimRight "/")) -}}
-    {{- $items = $items | append (dict "position" 3 "name" (T "breadcrumb_tags") "item" ("tags/" | absURL | strings.TrimRight "/")) -}}
-    {{- $items = $items | append (dict "position" 4 "name" .Title "item" (.Permalink | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 2 "name" (T "breadcrumb_blog") "item" ("blog/" | absURL)) -}}
+    {{- $items = $items | append (dict "position" 3 "name" (T "breadcrumb_tags") "item" ("tags/" | absURL)) -}}
+    {{- $items = $items | append (dict "position" 4 "name" .Title "item" .Permalink) -}}
   {{- else -}}
-    {{- $items = $items | append (dict "position" 2 "name" .Title "item" (.Permalink | strings.TrimRight "/")) -}}
+    {{- $items = $items | append (dict "position" 2 "name" .Title "item" .Permalink) -}}
   {{- end -}}
   {
     "@context": "https://schema.org",
@@ -92,7 +92,7 @@
         "@type": "ListItem",
         "position": {{ $el.position }},
         "name": {{ $el.name | jsonify | safeJS }},
-        "item": {{ $el.item | jsonify | safeJS }}
+        "item": { "@type": "WebPage", "@id": {{ $el.item | jsonify | safeJS }} }
       }
       {{- end -}}
     ]
