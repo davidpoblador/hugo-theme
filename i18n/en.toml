@@ -82,6 +82,9 @@ other = "Share this post"
 [share_on_x]
 other = "Share on X"
 
+[share_on_facebook]
+other = "Share on Facebook"
+
 [share_on_linkedin]
 other = "Share on LinkedIn"
 
