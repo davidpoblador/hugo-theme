@@ -6,15 +6,16 @@ document.addEventListener('click', function (e) {
   if (!btn) return
   var url = btn.getAttribute('data-copy-link')
   navigator.clipboard.writeText(url).then(function () {
-    // Show text feedback if available (sidebar/inline)
-    var feedback = btn.nextElementSibling
-    if (feedback && feedback.tagName === 'SPAN') {
-      feedback.classList.remove('opacity-0')
-      setTimeout(function () { feedback.classList.add('opacity-0') }, 1500)
-    }
-    // Brief color flash on the button itself (works for FAB too)
+    // Swap icon to checkmark briefly, then revert
+    var icon = btn.querySelector('svg')
+    if (!icon) return
+    var original = icon.outerHTML
+    icon.outerHTML = '<svg class="' + icon.getAttribute('class') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
     btn.classList.add('text-accent')
-    setTimeout(function () { btn.classList.remove('text-accent') }, 1500)
+    setTimeout(function () {
+      btn.querySelector('svg').outerHTML = original
+      btn.classList.remove('text-accent')
+    }, 1500)
   })
 })
 

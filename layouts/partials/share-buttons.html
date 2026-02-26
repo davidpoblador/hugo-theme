@@ -21,12 +21,9 @@
   <a href="{{ $blueskyURL }}" target="_blank" rel="noopener noreferrer" aria-label="{{ T "share_on_bluesky" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors">
     {{ partial "icons/social-icon.html" (dict "icon" "bluesky" "class" "w-4 h-4") }}
   </a>
-  <span class="relative inline-flex items-center">
-    <button data-copy-link="{{ $url }}" aria-label="{{ T "copy_link" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors cursor-pointer text-left">
-      {{ partial "icons/social-icon.html" (dict "icon" "link" "class" "w-4 h-4") }}
-    </button>
-    <span class="opacity-0 transition-opacity duration-300 absolute left-full ml-2 font-mono text-xs text-neutral-400 dark:text-neutral-500 whitespace-nowrap">{{ T "link_copied" }}</span>
-  </span>
+  <button data-copy-link="{{ $url }}" aria-label="{{ T "copy_link" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors cursor-pointer text-left">
+    {{ partial "icons/social-icon.html" (dict "icon" "link" "class" "w-4 h-4") }}
+  </button>
   <button data-native-share data-share-title="{{ $title }}" data-share-url="{{ $url }}" aria-label="{{ T "share_native" }}" class="hidden text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors cursor-pointer text-left">
     {{ partial "icons/social-icon.html" (dict "icon" "share" "class" "w-4 h-4") }}
   </button>
@@ -46,12 +43,9 @@
     <a href="{{ $blueskyURL }}" target="_blank" rel="noopener noreferrer" aria-label="{{ T "share_on_bluesky" }}" title="{{ T "share_on_bluesky" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors">
       {{ partial "icons/social-icon.html" (dict "icon" "bluesky" "class" "w-[18px] h-[18px]") }}
     </a>
-    <span class="relative inline-flex items-center">
-      <button data-copy-link="{{ $url }}" aria-label="{{ T "copy_link" }}" title="{{ T "copy_link" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors cursor-pointer">
-        {{ partial "icons/social-icon.html" (dict "icon" "link" "class" "w-[18px] h-[18px]") }}
-      </button>
-      <span class="opacity-0 transition-opacity duration-300 absolute left-full ml-2 font-mono text-xs text-neutral-400 dark:text-neutral-500 whitespace-nowrap">{{ T "link_copied" }}</span>
-    </span>
+    <button data-copy-link="{{ $url }}" aria-label="{{ T "copy_link" }}" title="{{ T "copy_link" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors cursor-pointer">
+      {{ partial "icons/social-icon.html" (dict "icon" "link" "class" "w-[18px] h-[18px]") }}
+    </button>
     <button data-native-share data-share-title="{{ $title }}" data-share-url="{{ $url }}" aria-label="{{ T "share_native" }}" title="{{ T "share_native" }}" class="hidden text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors cursor-pointer">
       {{ partial "icons/social-icon.html" (dict "icon" "share" "class" "w-[18px] h-[18px]") }}
     </button>
