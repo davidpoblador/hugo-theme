@@ -32,7 +32,7 @@
 {{- else if eq $style "inline" -}}
 <!-- Share Inline (end of article) -->
 <nav id="share-inline" aria-label="{{ T "share_post" }}" class="mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-  <p class="font-mono text-xs text-neutral-300 dark:text-neutral-600 mb-3">// {{ T "share_post" }}</p>
+  <p class="font-mono text-xs text-neutral-400 dark:text-neutral-500 mb-3">// {{ T "share_post" }}</p>
   <div class="flex items-center gap-3">
     <a href="{{ $xURL }}" target="_blank" rel="noopener noreferrer" aria-label="{{ T "share_on_x" }}" title="{{ T "share_on_x" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors">
       {{ partial "icons/social-icon.html" (dict "icon" "x" "class" "w-[18px] h-[18px]") }}
