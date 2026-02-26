@@ -38,14 +38,14 @@ document.addEventListener('click', function (e) {
   }
 })
 
-// Share buttons: Bluesky deep link on mobile
-// On touch devices, try bluesky:// scheme to open compose in the app directly
+// Share buttons: app deep link on mobile
+// On touch devices, try native app scheme (bluesky://, fb://) to open compose directly
 if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
   document.addEventListener('click', function (e) {
-    var link = e.target.closest('[data-bsky-deeplink]')
+    var link = e.target.closest('[data-app-deeplink]')
     if (!link) return
     e.preventDefault()
-    var deepLink = link.getAttribute('data-bsky-deeplink')
+    var deepLink = link.getAttribute('data-app-deeplink')
     var webUrl = link.href
     // Try the deep link; fall back to web URL after timeout
     var didNavigate = false
@@ -58,7 +58,7 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
       if (!didNavigate) {
         window.open(webUrl, '_blank', 'noopener,noreferrer')
       }
-    }, 1500)
+    }, 1000)
   })
 }
 
