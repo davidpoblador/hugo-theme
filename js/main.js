@@ -6,11 +6,15 @@ document.addEventListener('click', function (e) {
   if (!btn) return
   var url = btn.getAttribute('data-copy-link')
   navigator.clipboard.writeText(url).then(function () {
+    // Show text feedback if available (sidebar/inline)
     var feedback = btn.nextElementSibling
-    if (feedback) {
+    if (feedback && feedback.tagName === 'SPAN') {
       feedback.classList.remove('opacity-0')
       setTimeout(function () { feedback.classList.add('opacity-0') }, 1500)
     }
+    // Brief color flash on the button itself (works for FAB too)
+    btn.classList.add('text-accent')
+    setTimeout(function () { btn.classList.remove('text-accent') }, 1500)
   })
 })
 
