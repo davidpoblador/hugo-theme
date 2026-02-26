@@ -2,8 +2,8 @@
 {{- $style := .style -}}
 {{- $url := replace $page.Permalink "/index.html" "/" -}}
 {{- $title := $page.Title -}}
-{{- $encodedURL := $url | urls.QueryEscape -}}
-{{- $encodedTitle := $title | urls.QueryEscape -}}
+{{- $encodedURL := urlquery $url -}}
+{{- $encodedTitle := urlquery $title -}}
 
 {{- $xURL := printf "https://x.com/intent/post?url=%s&text=%s" $encodedURL $encodedTitle -}}
 {{- $linkedinURL := printf "https://www.linkedin.com/sharing/share-offsite/?url=%s" $encodedURL -}}
