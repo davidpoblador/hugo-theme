@@ -75,3 +75,24 @@ other = "writing"
 
 [portfolio_event]
 other = "event"
+
+[share_post]
+other = "Share this post"
+
+[share_on_x]
+other = "Share on X"
+
+[share_on_linkedin]
+other = "Share on LinkedIn"
+
+[share_on_bluesky]
+other = "Share on Bluesky"
+
+[copy_link]
+other = "Copy link"
+
+[share_native]
+other = "Share"
+
+[link_copied]
+other = "Link copied!"
