@@ -1,0 +1,76 @@
+{{- $page := .page -}}
+{{- $style := .style -}}
+{{- $url := replace $page.Permalink "/index.html" "/" -}}
+{{- $title := $page.Title -}}
+{{- $encodedURL := $url | urls.QueryEscape -}}
+{{- $encodedTitle := $title | urls.QueryEscape -}}
+
+{{- $xURL := printf "https://x.com/intent/post?url=%s&text=%s" $encodedURL $encodedTitle -}}
+{{- $linkedinURL := printf "https://www.linkedin.com/sharing/share-offsite/?url=%s" $encodedURL -}}
+{{- $blueskyURL := printf "https://bsky.app/intent/compose?text=%s%%20%s" $encodedTitle $encodedURL -}}
+
+{{- if eq $style "sidebar" -}}
+<!-- Share Sidebar (desktop only) -->
+<nav aria-label="{{ T "share_post" }}" class="hidden lg:flex flex-col gap-2">
+  <a href="{{ $xURL }}" target="_blank" rel="noopener noreferrer" aria-label="{{ T "share_on_x" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors">
+    {{ partial "icons/social-icon.html" (dict "icon" "x" "class" "w-4 h-4") }}
+  </a>
+  <a href="{{ $linkedinURL }}" target="_blank" rel="noopener noreferrer" aria-label="{{ T "share_on_linkedin" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors">
+    {{ partial "icons/social-icon.html" (dict "icon" "linkedin" "class" "w-4 h-4") }}
+  </a>
+  <a href="{{ $blueskyURL }}" target="_blank" rel="noopener noreferrer" aria-label="{{ T "share_on_bluesky" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors">
+    {{ partial "icons/social-icon.html" (dict "icon" "bluesky" "class" "w-4 h-4") }}
+  </a>
+  <button data-copy-link="{{ $url }}" aria-label="{{ T "copy_link" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors cursor-pointer text-left">
+    {{ partial "icons/social-icon.html" (dict "icon" "link" "class" "w-4 h-4") }}
+  </button>
+</nav>
+
+{{- else if eq $style "inline" -}}
+<!-- Share Inline (end of article) -->
+<nav id="share-inline" aria-label="{{ T "share_post" }}" class="mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-700">
+  <p class="font-mono text-xs text-neutral-300 dark:text-neutral-600 mb-3">// {{ T "share_post" }}</p>
+  <div class="flex items-center gap-3">
+    <a href="{{ $xURL }}" target="_blank" rel="noopener noreferrer" aria-label="{{ T "share_on_x" }}" title="{{ T "share_on_x" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors">
+      {{ partial "icons/social-icon.html" (dict "icon" "x" "class" "w-[18px] h-[18px]") }}
+    </a>
+    <a href="{{ $linkedinURL }}" target="_blank" rel="noopener noreferrer" aria-label="{{ T "share_on_linkedin" }}" title="{{ T "share_on_linkedin" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors">
+      {{ partial "icons/social-icon.html" (dict "icon" "linkedin" "class" "w-[18px] h-[18px]") }}
+    </a>
+    <a href="{{ $blueskyURL }}" target="_blank" rel="noopener noreferrer" aria-label="{{ T "share_on_bluesky" }}" title="{{ T "share_on_bluesky" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors">
+      {{ partial "icons/social-icon.html" (dict "icon" "bluesky" "class" "w-[18px] h-[18px]") }}
+    </a>
+    <span class="relative inline-flex items-center">
+      <button data-copy-link="{{ $url }}" aria-label="{{ T "copy_link" }}" title="{{ T "copy_link" }}" class="text-neutral-400 dark:text-neutral-500 hover:text-accent transition-colors cursor-pointer">
+        {{ partial "icons/social-icon.html" (dict "icon" "link" "class" "w-[18px] h-[18px]") }}
+      </button>
+      <span class="opacity-0 transition-opacity duration-300 absolute left-full ml-2 font-mono text-xs text-neutral-400 dark:text-neutral-500 whitespace-nowrap">{{ T "link_copied" }}</span>
+    </span>
+  </div>
+</nav>
+
+{{- else if eq $style "fab" -}}
+<!-- Share FAB (mobile only) -->
+<div id="share-fab" class="lg:hidden fixed bottom-6 right-6 z-40 flex flex-col-reverse items-center gap-2">
+  <button id="share-fab-toggle" aria-label="{{ T "share_post" }}" aria-expanded="false" class="w-12 h-12 rounded-full bg-accent text-white shadow-lg flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity">
+    {{ partial "icons/social-icon.html" (dict "icon" "share" "class" "w-5 h-5") }}
+  </button>
+  <div id="share-fab-menu" class="hidden flex-col gap-2 pb-1" role="group" aria-label="{{ T "share_post" }}">
+    <a href="{{ $xURL }}" target="_blank" rel="noopener noreferrer" aria-label="{{ T "share_on_x" }}" class="w-10 h-10 rounded-full bg-white dark:bg-neutral-800 shadow-md flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:text-accent transition-colors">
+      {{ partial "icons/social-icon.html" (dict "icon" "x" "class" "w-4 h-4") }}
+    </a>
+    <a href="{{ $linkedinURL }}" target="_blank" rel="noopener noreferrer" aria-label="{{ T "share_on_linkedin" }}" class="w-10 h-10 rounded-full bg-white dark:bg-neutral-800 shadow-md flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:text-accent transition-colors">
+      {{ partial "icons/social-icon.html" (dict "icon" "linkedin" "class" "w-4 h-4") }}
+    </a>
+    <a href="{{ $blueskyURL }}" target="_blank" rel="noopener noreferrer" aria-label="{{ T "share_on_bluesky" }}" class="w-10 h-10 rounded-full bg-white dark:bg-neutral-800 shadow-md flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:text-accent transition-colors">
+      {{ partial "icons/social-icon.html" (dict "icon" "bluesky" "class" "w-4 h-4") }}
+    </a>
+    <button data-copy-link="{{ $url }}" aria-label="{{ T "copy_link" }}" class="w-10 h-10 rounded-full bg-white dark:bg-neutral-800 shadow-md flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:text-accent transition-colors cursor-pointer">
+      {{ partial "icons/social-icon.html" (dict "icon" "link" "class" "w-4 h-4") }}
+    </button>
+    <button data-native-share data-share-title="{{ $title }}" data-share-url="{{ $url }}" aria-label="{{ T "share_native" }}" class="w-10 h-10 rounded-full bg-white dark:bg-neutral-800 shadow-md flex items-center justify-center text-neutral-600 dark:text-neutral-300 hover:text-accent transition-colors cursor-pointer">
+      {{ partial "icons/social-icon.html" (dict "icon" "share" "class" "w-4 h-4") }}
+    </button>
+  </div>
+</div>
+{{- end -}}
