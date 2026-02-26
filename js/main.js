@@ -4,7 +4,7 @@ import 'instant.page'
 document.addEventListener('click', function (e) {
   var btn = e.target.closest('[data-copy-link]')
   if (!btn) return
-  e.stopPropagation()
+  e.stopImmediatePropagation()
   var url = btn.getAttribute('data-copy-link')
   navigator.clipboard.writeText(url).then(function () {
     // Swap icon to checkmark briefly, then revert
