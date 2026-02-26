@@ -19,6 +19,12 @@ document.addEventListener('click', function (e) {
 })
 
 // Share buttons: native share (Web Share API)
+// Show native share buttons only when browser supports it
+if (navigator.share) {
+  document.querySelectorAll('[data-native-share]').forEach(function (btn) {
+    btn.classList.remove('hidden')
+  })
+}
 document.addEventListener('click', function (e) {
   var btn = e.target.closest('[data-native-share]')
   if (!btn) return
