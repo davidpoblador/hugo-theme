@@ -75,3 +75,24 @@ other = "escriptura"
 
 [portfolio_event]
 other = "esdeveniment"
+
+[share_post]
+other = "Comparteix"
+
+[share_on_x]
+other = "Comparteix a X"
+
+[share_on_linkedin]
+other = "Comparteix a LinkedIn"
+
+[share_on_bluesky]
+other = "Comparteix a Bluesky"
+
+[copy_link]
+other = "Copia l'enllaç"
+
+[share_native]
+other = "Comparteix"
+
+[link_copied]
+other = "Enllaç copiat!"

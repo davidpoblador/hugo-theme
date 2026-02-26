@@ -75,3 +75,24 @@ other = "skrift"
 
 [portfolio_event]
 other = "evenemang"
+
+[share_post]
+other = "Dela"
+
+[share_on_x]
+other = "Dela på X"
+
+[share_on_linkedin]
+other = "Dela på LinkedIn"
+
+[share_on_bluesky]
+other = "Dela på Bluesky"
+
+[copy_link]
+other = "Kopiera länk"
+
+[share_native]
+other = "Dela"
+
+[link_copied]
+other = "Länk kopierad!"

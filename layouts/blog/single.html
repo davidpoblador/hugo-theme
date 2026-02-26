@@ -98,10 +98,23 @@
 </p>
 {{ end }}
 
-<!-- Article Body -->
-<article class="text-sm md:text-base leading-[1.8] text-neutral-600 dark:text-neutral-400 space-y-6">
-  {{ .Content }}
-</article>
+<!-- Article with Share Sidebar -->
+<div class="relative">
+  <!-- Share Sidebar (desktop) -->
+  <div class="hidden lg:block absolute -right-14 top-0 h-full">
+    <div class="sticky top-24">
+      {{ partial "share-buttons.html" (dict "page" . "style" "sidebar") }}
+    </div>
+  </div>
+
+  <!-- Article Body -->
+  <article class="text-sm md:text-base leading-[1.8] text-neutral-600 dark:text-neutral-400 space-y-6">
+    {{ .Content }}
+  </article>
+</div>
+
+<!-- Share Inline (end of article) -->
+{{ partial "share-buttons.html" (dict "page" . "style" "inline") }}
 
 <!-- Tags -->
 {{ with .GetTerms "tags" }}
@@ -127,4 +140,7 @@
     {{ end }}
   </div>
 </nav>
+
+<!-- Share FAB (mobile) -->
+{{ partial "share-buttons.html" (dict "page" . "style" "fab") }}
 {{ end }}
