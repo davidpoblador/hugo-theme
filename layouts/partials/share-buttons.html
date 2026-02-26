@@ -7,7 +7,7 @@
 
 {{- $xURL := printf "https://twitter.com/intent/tweet?url=%s&text=%s" $encodedURL $encodedTitle -}}
 {{- $facebookURL := printf "https://www.facebook.com/sharer/sharer.php?u=%s" $encodedURL -}}
-{{- $linkedinURL := printf "https://www.linkedin.com/sharing/share-offsite/?url=%s" $encodedURL -}}
+{{- $linkedinURL := printf "https://www.linkedin.com/shareArticle?mini=true&url=%s&title=%s&source=%s" $encodedURL $encodedTitle $encodedURL -}}
 {{- $blueskyURL := printf "https://bsky.app/intent/compose?text=%s%%20%s" $encodedTitle $encodedURL -}}
 {{- $blueskyDeepLink := printf "bluesky://intent/compose?text=%s%%20%s" $encodedTitle $encodedURL -}}
 
