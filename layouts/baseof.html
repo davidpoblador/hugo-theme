@@ -92,7 +92,7 @@
         "@type": "ListItem",
         "position": {{ $el.position }},
         "name": {{ $el.name | jsonify | safeJS }},
-        "item": { "@type": "WebPage", "@id": {{ $el.item | jsonify | safeJS }} }
+        "item": {{ $el.item | jsonify | safeJS }}
       }
       {{- end -}}
     ]
