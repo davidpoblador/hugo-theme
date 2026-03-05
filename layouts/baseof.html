@@ -298,6 +298,7 @@
         {{ end }}
         {{- with .Site.GetPage "/blog" }}<span class="relative inline-flex items-center"><button onclick="navigator.clipboard.writeText('{{ `blog/feed.xml` | absURL }}').then(()=>{const s=this.nextElementSibling;s.classList.remove('opacity-0');setTimeout(()=>s.classList.add('opacity-0'),1500)})" title="{{ T "copy_rss_url" }}" aria-label="{{ T "copy_rss_url" }}" class="text-neutral-300 dark:text-neutral-600 hover:text-accent transition-colors cursor-pointer">{{ partial "icons/social-icon.html" (dict "icon" "rss" "class" "w-4 h-4") }}</button><span class="opacity-0 transition-opacity duration-300 absolute left-full ml-2 font-mono text-xs text-neutral-400 dark:text-neutral-500 whitespace-nowrap">{{ T "copied" }}</span></span>{{ end }}
       </div>
+      <p class="font-mono text-[10px] text-neutral-300 dark:text-neutral-700">{{ now.Format "2006-01-02T15:04:05Z07:00" }}</p>
     </div>
   </footer>
 </div>
