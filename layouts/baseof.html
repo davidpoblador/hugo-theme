@@ -95,6 +95,9 @@
   {{- range .Site.Params.social -}}
     {{- $socialURLs = $socialURLs | append .url -}}
   {{- end -}}
+  {{- range .Site.Params.sameAs -}}
+    {{- $socialURLs = $socialURLs | append . -}}
+  {{- end -}}
   {{- $langs := slice -}}
   {{- range .Site.Params.alternates -}}
     {{- if ne .hreflang "x-default" -}}
