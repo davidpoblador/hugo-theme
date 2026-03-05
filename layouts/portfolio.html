@@ -10,18 +10,18 @@
   {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": {{ .Title | jsonify | safeJS }},
+    "name": {{ .Title | jsonify | safeHTML }},
     "numberOfItems": {{ len $items }},
     "itemListElement": [
       {{- range $i, $item := $items }}{{ if $i }},{{ end }}
       {
         "@type": "ListItem",
         "position": {{ add $i 1 }},
-        "name": {{ $item.title | jsonify | safeJS }}
+        "name": {{ $item.title | jsonify | safeHTML }}
         {{- with $item.links -}}
           {{- with index . 0 -}}
         ,
-        "url": {{ .url | jsonify | safeJS }}
+        "url": {{ .url | jsonify | safeHTML }}
           {{- end -}}
         {{- end }}
       }

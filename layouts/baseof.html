@@ -91,8 +91,8 @@
       {
         "@type": "ListItem",
         "position": {{ $el.position }},
-        "name": {{ $el.name | jsonify | safeJS }},
-        "item": {{ $el.item | jsonify | safeJS }}
+        "name": {{ $el.name | jsonify | safeHTML }},
+        "item": {{ $el.item | jsonify | safeHTML }}
       }
       {{- end -}}
     ]
@@ -107,20 +107,20 @@
       {
         "@type": "Person",
         "@id": "{{ .Site.BaseURL }}#person",
-        "name": {{ .Site.Title | jsonify | safeJS }},
-        "url": {{ .Site.BaseURL | strings.TrimRight "/" | jsonify | safeJS }},
+        "name": {{ .Site.Title | jsonify | safeHTML }},
+        "url": {{ .Site.BaseURL | strings.TrimRight "/" | jsonify | safeHTML }},
         "image": "{{ $photo.Permalink }}?v={{ $photo.Content | md5 }}",
         {{- with .Site.Params.subtitle }}
-        "jobTitle": {{ . | jsonify | safeJS }},
+        "jobTitle": {{ . | jsonify | safeHTML }},
         {{- end }}
-        "description": {{ .Site.Params.description | jsonify | safeJS }},
+        "description": {{ .Site.Params.description | jsonify | safeHTML }},
         "sameAs": [
           {{- $socialURLs := slice -}}
           {{- range .Site.Params.social -}}
             {{- $socialURLs = $socialURLs | append .url -}}
           {{- end -}}
           {{- range $i, $url := $socialURLs }}{{ if $i }},{{ end }}
-          {{ $url | jsonify | safeJS }}
+          {{ $url | jsonify | safeHTML }}
           {{- end }}
         ],
         "knowsLanguage": [
@@ -131,23 +131,23 @@
             {{- end -}}
           {{- end -}}
           {{- range $i, $lang := $langs }}{{ if $i }},{{ end }}
-          {{ $lang | jsonify | safeJS }}
+          {{ $lang | jsonify | safeHTML }}
           {{- end }}
         ]
       },
       {
         "@type": "ProfilePage",
         "@id": "{{ .Site.BaseURL }}#profilepage",
-        "url": {{ .Site.BaseURL | strings.TrimRight "/" | jsonify | safeJS }},
+        "url": {{ .Site.BaseURL | strings.TrimRight "/" | jsonify | safeHTML }},
         "mainEntity": { "@id": "{{ .Site.BaseURL }}#person" }
       },
       {
         "@type": "WebSite",
         "@id": "{{ .Site.BaseURL }}#website",
-        "url": {{ .Site.BaseURL | strings.TrimRight "/" | jsonify | safeJS }},
-        "name": {{ .Site.Title | jsonify | safeJS }},
-        "description": {{ .Site.Params.description | jsonify | safeJS }},
-        "inLanguage": {{ .Site.LanguageCode | jsonify | safeJS }},
+        "url": {{ .Site.BaseURL | strings.TrimRight "/" | jsonify | safeHTML }},
+        "name": {{ .Site.Title | jsonify | safeHTML }},
+        "description": {{ .Site.Params.description | jsonify | safeHTML }},
+        "inLanguage": {{ .Site.LanguageCode | jsonify | safeHTML }},
         "publisher": { "@id": "{{ .Site.BaseURL }}#person" }
       }
     ]

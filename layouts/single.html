@@ -8,11 +8,11 @@
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": {{ .Title | jsonify | safeJS }},
+    "name": {{ .Title | jsonify | safeHTML }},
     {{- with .Description }}
-    "description": {{ . | jsonify | safeJS }},
+    "description": {{ . | jsonify | safeHTML }},
     {{- end }}
-    "url": {{ replace .Permalink "/index.html" "/" | jsonify | safeJS }},
+    "url": {{ replace .Permalink "/index.html" "/" | jsonify | safeHTML }},
     "author": { "@id": "{{ .Site.BaseURL }}#person" }
   }
   </script>
