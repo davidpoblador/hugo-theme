@@ -4,29 +4,15 @@
 {{ define "og_description" }}{{ .Description | default .Site.Params.description }}{{ end }}
 
 {{ define "extra_meta" }}
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Blog",
-    "@id": "{{ "blog/" | absURL }}#blog",
-    "name": {{ .Title | jsonify | safeHTML }},
-    {{- with .Description }}
-    "description": {{ . | jsonify | safeHTML }},
-    {{- end }}
-    "url": {{ replace .Permalink "/index.html" "/" | jsonify | safeHTML }},
-    "author": { "@id": "{{ .Site.BaseURL }}#person" },
-    "blogPost": [
-      {{- range $i, $page := .Pages }}{{ if $i }},{{ end }}
-      {
-        "@type": "BlogPosting",
-        "headline": {{ $page.Title | jsonify | safeHTML }},
-        "datePublished": "{{ $page.Date.Format "2006-01-02T15:04:05Z07:00" }}",
-        "url": {{ replace $page.Permalink "/index.html" "/" | jsonify | safeHTML }}
-      }
-      {{- end }}
-    ]
-  }
-  </script>
+  {{- $posts := slice -}}
+  {{- range .Pages -}}
+    {{- $posts = $posts | append (dict "@type" "BlogPosting" "headline" .Title "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00") "url" (replace .Permalink "/index.html" "/")) -}}
+  {{- end -}}
+  {{- $blog := dict "@context" "https://schema.org" "@type" "Blog" "@id" (printf "%s#blog" ("blog/" | absURL)) "name" .Title "url" (replace .Permalink "/index.html" "/") "author" (dict "@id" (printf "%s#person" .Site.BaseURL)) "blogPost" $posts -}}
+  {{- with .Description -}}
+    {{- $blog = merge $blog (dict "description" .) -}}
+  {{- end -}}
+  {{ printf `<script type="application/ld+json">%s</script>` ($blog | jsonify (dict "noHTMLEscape" true)) | safeHTML }}
 {{ end }}
 
 {{ define "content" }}

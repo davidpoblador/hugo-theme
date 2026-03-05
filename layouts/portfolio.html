@@ -5,31 +5,20 @@
 
 {{ define "extra_meta" }}
   {{- $items := .Site.Params.portfolio | default slice -}}
-  {{ if $items }}
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": {{ .Title | jsonify | safeHTML }},
-    "numberOfItems": {{ len $items }},
-    "itemListElement": [
-      {{- range $i, $item := $items }}{{ if $i }},{{ end }}
-      {
-        "@type": "ListItem",
-        "position": {{ add $i 1 }},
-        "name": {{ $item.title | jsonify | safeHTML }}
-        {{- with $item.links -}}
-          {{- with index . 0 -}}
-        ,
-        "url": {{ .url | jsonify | safeHTML }}
-          {{- end -}}
-        {{- end }}
-      }
-      {{- end }}
-    ]
-  }
-  </script>
-  {{ end }}
+  {{- if $items -}}
+  {{- $listItems := slice -}}
+  {{- range $i, $item := $items -}}
+    {{- $li := dict "@type" "ListItem" "position" (add $i 1) "name" $item.title -}}
+    {{- with $item.links -}}
+      {{- with index . 0 -}}
+        {{- $li = merge $li (dict "url" .url) -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $listItems = $listItems | append $li -}}
+  {{- end -}}
+  {{- $schema := dict "@context" "https://schema.org" "@type" "ItemList" "name" .Title "numberOfItems" (len $items) "itemListElement" $listItems -}}
+  {{ printf `<script type="application/ld+json">%s</script>` ($schema | jsonify (dict "noHTMLEscape" true)) | safeHTML }}
+  {{- end }}
 {{ end }}
 
 {{ define "content" }}

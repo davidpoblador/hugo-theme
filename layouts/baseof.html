@@ -65,7 +65,6 @@
   {{- $photoLg := $photo.Fill "540x540" -}}
   <!-- Breadcrumb structured data (Google SEO) -->
   {{- if not $isHome }}
-  <script type="application/ld+json">
   {{- $items := slice (dict "position" 1 "name" (T "breadcrumb_home") "item" .Site.BaseURL) -}}
   {{- if $isBlogList -}}
     {{- $items = $items | append (dict "position" 2 "name" (T "breadcrumb_blog") "item" ("blog/" | absURL)) -}}
@@ -82,77 +81,34 @@
   {{- else -}}
     {{- $items = $items | append (dict "position" 2 "name" .Title "item" .Permalink) -}}
   {{- end -}}
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {{- range $i, $el := $items -}}
-      {{ if $i }},{{ end }}
-      {
-        "@type": "ListItem",
-        "position": {{ $el.position }},
-        "name": {{ $el.name | jsonify | safeHTML }},
-        "item": {{ $el.item | jsonify | safeHTML }}
-      }
-      {{- end -}}
-    ]
-  }
-  </script>
+  {{- $itemList := slice -}}
+  {{- range $items -}}
+    {{- $itemList = $itemList | append (dict "@type" "ListItem" "position" .position "name" .name "item" .item) -}}
+  {{- end -}}
+  {{- $breadcrumb := dict "@context" "https://schema.org" "@type" "BreadcrumbList" "itemListElement" $itemList -}}
+  {{ printf `<script type="application/ld+json">%s</script>` ($breadcrumb | jsonify (dict "noHTMLEscape" true)) | safeHTML }}
   {{- end }}
   {{- if $isHome }}
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "@id": "{{ .Site.BaseURL }}#person",
-        "name": {{ .Site.Title | jsonify | safeHTML }},
-        "url": {{ .Site.BaseURL | strings.TrimRight "/" | jsonify | safeHTML }},
-        "image": "{{ $photo.Permalink }}?v={{ $photo.Content | md5 }}",
-        {{- with .Site.Params.subtitle }}
-        "jobTitle": {{ . | jsonify | safeHTML }},
-        {{- end }}
-        "description": {{ .Site.Params.description | jsonify | safeHTML }},
-        "sameAs": [
-          {{- $socialURLs := slice -}}
-          {{- range .Site.Params.social -}}
-            {{- $socialURLs = $socialURLs | append .url -}}
-          {{- end -}}
-          {{- range $i, $url := $socialURLs }}{{ if $i }},{{ end }}
-          {{ $url | jsonify | safeHTML }}
-          {{- end }}
-        ],
-        "knowsLanguage": [
-          {{- $langs := slice -}}
-          {{- range .Site.Params.alternates -}}
-            {{- if ne .hreflang "x-default" -}}
-              {{- $langs = $langs | append .hreflang -}}
-            {{- end -}}
-          {{- end -}}
-          {{- range $i, $lang := $langs }}{{ if $i }},{{ end }}
-          {{ $lang | jsonify | safeHTML }}
-          {{- end }}
-        ]
-      },
-      {
-        "@type": "ProfilePage",
-        "@id": "{{ .Site.BaseURL }}#profilepage",
-        "url": {{ .Site.BaseURL | strings.TrimRight "/" | jsonify | safeHTML }},
-        "mainEntity": { "@id": "{{ .Site.BaseURL }}#person" }
-      },
-      {
-        "@type": "WebSite",
-        "@id": "{{ .Site.BaseURL }}#website",
-        "url": {{ .Site.BaseURL | strings.TrimRight "/" | jsonify | safeHTML }},
-        "name": {{ .Site.Title | jsonify | safeHTML }},
-        "description": {{ .Site.Params.description | jsonify | safeHTML }},
-        "inLanguage": {{ .Site.LanguageCode | jsonify | safeHTML }},
-        "publisher": { "@id": "{{ .Site.BaseURL }}#person" }
-      }
-    ]
-  }
-  </script>
+  {{- $baseURL := .Site.BaseURL | strings.TrimRight "/" -}}
+  {{- $photoURL := printf "%s?v=%s" $photo.Permalink ($photo.Content | md5) -}}
+  {{- $socialURLs := slice -}}
+  {{- range .Site.Params.social -}}
+    {{- $socialURLs = $socialURLs | append .url -}}
+  {{- end -}}
+  {{- $langs := slice -}}
+  {{- range .Site.Params.alternates -}}
+    {{- if ne .hreflang "x-default" -}}
+      {{- $langs = $langs | append .hreflang -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $person := dict "@type" "Person" "@id" (printf "%s#person" $baseURL) "name" .Site.Title "url" $baseURL "image" $photoURL "description" .Site.Params.description "sameAs" $socialURLs "knowsLanguage" $langs -}}
+  {{- with .Site.Params.subtitle -}}
+    {{- $person = merge $person (dict "jobTitle" .) -}}
+  {{- end -}}
+  {{- $profilePage := dict "@type" "ProfilePage" "@id" (printf "%s#profilepage" $baseURL) "url" $baseURL "mainEntity" (dict "@id" (printf "%s#person" $baseURL)) -}}
+  {{- $webSite := dict "@type" "WebSite" "@id" (printf "%s#website" $baseURL) "url" $baseURL "name" .Site.Title "description" .Site.Params.description "inLanguage" .Site.LanguageCode "publisher" (dict "@id" (printf "%s#person" $baseURL)) -}}
+  {{- $graph := dict "@context" "https://schema.org" "@graph" (slice $person $profilePage $webSite) -}}
+  {{ printf `<script type="application/ld+json">%s</script>` ($graph | jsonify (dict "noHTMLEscape" true)) | safeHTML }}
   {{- end }}
 </head>
 

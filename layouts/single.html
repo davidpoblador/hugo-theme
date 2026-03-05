@@ -4,18 +4,11 @@
 {{ define "og_description" }}{{ .Description | default .Site.Params.description }}{{ end }}
 
 {{ define "extra_meta" }}
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": {{ .Title | jsonify | safeHTML }},
-    {{- with .Description }}
-    "description": {{ . | jsonify | safeHTML }},
-    {{- end }}
-    "url": {{ replace .Permalink "/index.html" "/" | jsonify | safeHTML }},
-    "author": { "@id": "{{ .Site.BaseURL }}#person" }
-  }
-  </script>
+  {{- $page := dict "@context" "https://schema.org" "@type" "WebPage" "name" .Title "url" (replace .Permalink "/index.html" "/") "author" (dict "@id" (printf "%s#person" .Site.BaseURL)) -}}
+  {{- with .Description -}}
+    {{- $page = merge $page (dict "description" .) -}}
+  {{- end -}}
+  {{ printf `<script type="application/ld+json">%s</script>` ($page | jsonify (dict "noHTMLEscape" true)) | safeHTML }}
 {{ end }}
 
 {{ define "content" }}

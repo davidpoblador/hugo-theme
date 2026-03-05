@@ -5,38 +5,21 @@
 
 {{ define "extra_meta" }}
   {{- $projects := .Site.Params.projects -}}
-  {{ if $projects }}
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": {{ .Title | jsonify | safeHTML }},
-    "numberOfItems": {{ len $projects }},
-    "itemListElement": [
-      {{- range $i, $project := $projects }}{{ if $i }},{{ end }}
-      {
-        "@type": "ListItem",
-        "position": {{ add $i 1 }},
-        "item": {
-          "@type": "SoftwareApplication",
-          "name": {{ $project.name | jsonify | safeHTML }}
-          {{- with $project.link -}}
-          ,
-          "url": {{ . | jsonify | safeHTML }}
-          {{- end -}}
-          {{- with $project.description -}}
-          ,
-          "description": {{ . | jsonify | safeHTML }}
-          {{- end -}}
-          ,
-          "applicationCategory": "WebApplication"
-        }
-      }
-      {{- end }}
-    ]
-  }
-  </script>
-  {{ end }}
+  {{- if $projects -}}
+  {{- $listItems := slice -}}
+  {{- range $i, $project := $projects -}}
+    {{- $app := dict "@type" "SoftwareApplication" "name" $project.name "applicationCategory" "WebApplication" -}}
+    {{- with $project.link -}}
+      {{- $app = merge $app (dict "url" .) -}}
+    {{- end -}}
+    {{- with $project.description -}}
+      {{- $app = merge $app (dict "description" .) -}}
+    {{- end -}}
+    {{- $listItems = $listItems | append (dict "@type" "ListItem" "position" (add $i 1) "item" $app) -}}
+  {{- end -}}
+  {{- $schema := dict "@context" "https://schema.org" "@type" "ItemList" "name" .Title "numberOfItems" (len $projects) "itemListElement" $listItems -}}
+  {{ printf `<script type="application/ld+json">%s</script>` ($schema | jsonify (dict "noHTMLEscape" true)) | safeHTML }}
+  {{- end }}
 {{ end }}
 
 {{ define "content" }}
