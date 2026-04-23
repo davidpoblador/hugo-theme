@@ -1,4 +1,79 @@
 {{ define "content" }}
+{{- /* Publish /agent.json: structured site data consumed by the read-only WebMCP tools in main.js. */ -}}
+{{- $baseURL := .Site.BaseURL | strings.TrimRight "/" -}}
+
+{{- $social := slice -}}
+{{- range .Site.Params.social -}}
+  {{- $social = $social | append (dict "name" .name "url" .url) -}}
+{{- end -}}
+
+{{- $languages := slice -}}
+{{- range .Site.Params.alternates -}}
+  {{- if ne .hreflang "x-default" -}}
+    {{- $languages = $languages | append (dict "lang" .hreflang "url" .href) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $posts := slice -}}
+{{- range (where .Site.RegularPages "Section" "blog").ByDate.Reverse -}}
+  {{- $desc := .Description -}}
+  {{- if not $desc -}}{{- $desc = .Summary | plainify | truncate 240 -}}{{- end -}}
+  {{- $post := dict
+    "title" .Title
+    "date" (.Date.Format "2006-01-02")
+    "url" .Permalink
+    "description" $desc
+    "tags" (.Params.tags | default (slice))
+  -}}
+  {{- with .OutputFormats.Get "md" -}}
+    {{- $post = merge $post (dict "markdown_url" .Permalink) -}}
+  {{- end -}}
+  {{- $posts = $posts | append $post -}}
+{{- end -}}
+
+{{- $portfolio := slice -}}
+{{- range .Site.Params.portfolio -}}
+  {{- $entry := dict "title" .title "outlet" .outlet "date" .date "type" .type "lang" .lang -}}
+  {{- with .links -}}{{- $entry = merge $entry (dict "links" .) -}}{{- end -}}
+  {{- $portfolio = $portfolio | append $entry -}}
+{{- end -}}
+
+{{- $projects := slice -}}
+{{- range .Site.Params.projects -}}
+  {{- $projects = $projects | append (dict "name" .name "description" .description "link" .link "status" .status) -}}
+{{- end -}}
+
+{{- $agent := dict
+  "schema_version" "1"
+  "site" (dict
+    "title" .Site.Title
+    "baseURL" $baseURL
+    "languageCode" .Site.LanguageCode
+    "description" .Site.Params.description
+  )
+  "person" (dict
+    "name" .Site.Title
+    "subtitle" .Site.Params.subtitle
+    "affiliation" (.Site.Params.affiliationHTML | plainify)
+    "description" .Site.Params.description
+    "photo" (printf "%s/%s" $baseURL .Site.Params.photo)
+    "social" $social
+    "sameAs" (.Site.Params.sameAs | default (slice))
+    "languages" $languages
+  )
+  "posts" $posts
+  "portfolio" $portfolio
+  "projects" $projects
+  "contact" (dict
+    "message_tool" "contact_david"
+    "book_call_tool" "book_intro_call_with_david"
+    "book_call_url" (.Site.Params.ctaURL | default "")
+  )
+-}}
+{{- $json := $agent | jsonify (dict "indent" "  " "noHTMLEscape" true) -}}
+{{- (resources.FromString "agent.json" $json).Publish -}}
+
+
 {{ with .Params.intro }}
 <p class="text-xl md:text-2xl font-medium leading-relaxed text-neutral-800 dark:text-neutral-200 mb-12">
   {{ . }}
