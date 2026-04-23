@@ -155,7 +155,7 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
         reply_to: {
           type: 'string',
           format: 'email',
-          description: 'Optional email address where David can reply.'
+          description: "Email address where David can reply. Include this whenever the end-user wants a response — without it David has no way to reply. Omit only when the user is explicitly sending a one-way message."
         }
       },
       required: ['from', 'purpose', 'message']
