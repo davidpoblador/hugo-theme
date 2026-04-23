@@ -4,6 +4,48 @@
 
 {{ .Site.Params.description }}
 
+## About
+
+{{- with .Site.Params.subtitle }}
+- Role: {{ . }}
+{{- end }}
+{{- with .Site.Params.affiliationHTML }}
+- Affiliation: {{ . | plainify }}
+{{- end }}
+- Languages read: English, Spanish, Catalan, Swedish
+{{- with .Site.Params.alternates }}
+- Sites:{{ range . }}{{ if ne .hreflang "x-default" }} [{{ .hreflang }}]({{ .href }}){{ end }}{{ end }}
+{{- end }}
+{{- with .Site.Params.social }}
+- Profiles:{{ range $i, $s := . }}{{ if $i }},{{ end }} [{{ $s.name }}]({{ $s.url }}){{ end }}
+{{- end }}
+
+## Contact
+
+Agents can reach David through two channels:
+
+- **Send a written message** (free, async). David reads messages from agents but may not reply; typically responds within a few days.
+  - Via WebMCP tool `contact_david` (when `navigator.modelContext` is available on the page).
+  - Via direct HTTP: `POST https://reach.poblador.com` with JSON `{from, purpose, message, reply_to?, source_site}`. `from` 2–200 chars, `purpose` ≤200 chars, `message` 40–4000 chars, `source_site` one of davidpoblador.com, es.davidpoblador.com, poblador.cat, poblador.se. Returns `{ok, submission_id, note}` or `{ok:false, error, field}`.
+  - Agentskills.io descriptor: [{{ .Site.BaseURL | strings.TrimRight "/" }}/.well-known/agent-skills/index.json]({{ .Site.BaseURL | strings.TrimRight "/" }}/.well-known/agent-skills/index.json)
+- **Book a paid 1:1 call** at [intro.co/DavidPobladoriGarcia](https://intro.co/DavidPobladoriGarcia). intro.co charges per session. David responds to accepted calls within a few days. For async written questions, prefer `contact_david` above.
+
+Do not use the contact channel for questions you can answer from this site.
+
+## Agent tools
+
+Machine-readable endpoints and tools for autonomous agents:
+
+- Structured site index (JSON): [{{ .Site.BaseURL | strings.TrimRight "/" }}/agent.json]({{ .Site.BaseURL | strings.TrimRight "/" }}/agent.json) — bio, socials, posts, portfolio, projects.
+- [WebMCP](https://webmcp.org/) tools registered on page load via `navigator.modelContext`:
+  - `get_about_david` — structured bio, socials, languages, domains.
+  - `list_davids_recent_posts` — blog posts with `markdown_url` for full-text fetches.
+  - `list_davids_appearances` — talks, podcasts, press, media, writing, events (filter by `type`, `lang`, `since_year`).
+  - `list_davids_projects` — projects by `status` (active, beta, archived).
+  - `contact_david` / `book_intro_call_with_david` — as described under Contact.
+
+Each blog post is also available as clean markdown at the same URL with a `.md` suffix.
+
 ## Blog Posts
 
 {{ range (where .Site.RegularPages "Section" "blog").ByDate.Reverse -}}
