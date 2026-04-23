@@ -106,10 +106,24 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
   var REACH_ENDPOINT = 'https://reach.poblador.com'
   var INTRO_URL = 'https://intro.co/DavidPobladoriGarcia'
   var ALLOWED_SITES = ['davidpoblador.com', 'es.davidpoblador.com', 'poblador.cat', 'poblador.se']
+  var CONTACT_COOLDOWN_MS = 30_000
+  var LAST_CONTACT_KEY = 'dp:contact_david:last_attempt_ms'
 
   function sourceSite() {
     var h = (location.hostname || '').toLowerCase().replace(/^www\./, '')
     return ALLOWED_SITES.indexOf(h) !== -1 ? h : null
+  }
+
+  function recentContactMs() {
+    try {
+      var v = sessionStorage.getItem(LAST_CONTACT_KEY)
+      if (!v) return 0
+      var n = parseInt(v, 10)
+      return isNaN(n) ? 0 : n
+    } catch (_) { return 0 }
+  }
+  function markContactAttempt() {
+    try { sessionStorage.setItem(LAST_CONTACT_KEY, String(Date.now())) } catch (_) {}
   }
 
   navigator.modelContext.registerTool({
@@ -152,6 +166,16 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
       if (!site) {
         return { ok: false, error: 'This tool only runs on one of David\'s sites.' }
       }
+      var elapsed = Date.now() - recentContactMs()
+      if (elapsed < CONTACT_COOLDOWN_MS) {
+        return {
+          ok: false,
+          error: 'duplicate submission',
+          retry_after: Math.ceil((CONTACT_COOLDOWN_MS - elapsed) / 1000),
+          note: 'A contact_david call was already made on this page recently. Wait before retrying, or ask the user whether to resend.'
+        }
+      }
+      markContactAttempt()
       var body = {
         from: args.from,
         purpose: args.purpose,
