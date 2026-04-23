@@ -1,4 +1,5 @@
 {{ define "content" }}
+{{- partial "agent-skills.html" . -}}
 {{- /* Publish /agent.json: structured site data consumed by the read-only WebMCP tools in main.js. */ -}}
 {{- $baseURL := .Site.BaseURL | strings.TrimRight "/" -}}
 
