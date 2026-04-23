@@ -1,0 +1,31 @@
+{{- /* Publish each skill's SKILL.md under /.well-known/agent-skills/<name>/ and an
+       agentskills.io index manifest alongside them. Called from the home layout so the
+       site's baseURL is substituted into each skill's absolute URL at build time. */ -}}
+{{- $baseURL := .Site.BaseURL | strings.TrimRight "/" -}}
+
+{{- $skillDefs := slice
+  (dict "name" "book-a-chat" "type" "action" "description" "Book a paid intro call with David Poblador i Garcia via Intro.co.")
+  (dict "name" "contact-david" "type" "action" "description" "Send a written message to David Poblador via a public HTTPS endpoint.")
+-}}
+
+{{- $skills := slice -}}
+{{- range $skill := $skillDefs -}}
+  {{- $path := printf ".well-known/agent-skills/%s/SKILL.md" $skill.name -}}
+  {{- with resources.Get $path -}}
+    {{- .Publish -}}
+    {{- $skills = $skills | append (dict
+      "name" $skill.name
+      "type" $skill.type
+      "description" $skill.description
+      "url" (printf "%s/%s" $baseURL $path)
+      "sha256" (sha256 .Content)
+    ) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $manifest := dict
+  "$schema" "https://agentskills.io/schema/v0.2.0.json"
+  "skills" $skills
+-}}
+{{- $json := $manifest | jsonify (dict "indent" "  " "noHTMLEscape" true) -}}
+{{- (resources.FromString ".well-known/agent-skills/index.json" $json).Publish -}}
