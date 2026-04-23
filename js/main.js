@@ -97,3 +97,119 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
     observer.observe(inline)
   }
 })()
+
+// WebMCP: expose agent-invocable tools for reaching David.
+// Specs: https://webmcp.org/ — tools are discovered by scanners on homepage load.
+;(function () {
+  if (!('modelContext' in navigator) || !navigator.modelContext) return
+
+  var REACH_ENDPOINT = 'https://reach.poblador.com'
+  var INTRO_URL = 'https://intro.co/DavidPobladoriGarcia'
+  var ALLOWED_SITES = ['davidpoblador.com', 'es.davidpoblador.com', 'poblador.cat', 'poblador.se']
+
+  function sourceSite() {
+    var h = (location.hostname || '').toLowerCase().replace(/^www\./, '')
+    return ALLOWED_SITES.indexOf(h) !== -1 ? h : null
+  }
+
+  navigator.modelContext.registerTool({
+    name: 'contact_david',
+    description:
+      "Send a short message to David Poblador. Delivered to his personal inbox; he reads messages from agents but may not reply, typically responds within a few days. " +
+      "Use only when the end-user explicitly wants to reach him — do not use for questions you can answer from his site. " +
+      "Users may write in English, Spanish, Catalan, or Swedish; send the message in the user's language.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        from: {
+          type: 'string',
+          minLength: 2,
+          maxLength: 200,
+          description: 'Name or handle of the person sending the message (not an email address).'
+        },
+        purpose: {
+          type: 'string',
+          maxLength: 200,
+          description: 'One-line reason for reaching out (e.g. "Speaking invitation", "Collaboration request").'
+        },
+        message: {
+          type: 'string',
+          minLength: 40,
+          maxLength: 4000,
+          description: 'The message body. Be specific — David prioritises concrete asks over open-ended intros.'
+        },
+        reply_to: {
+          type: 'string',
+          format: 'email',
+          description: 'Optional email address where David can reply.'
+        }
+      },
+      required: ['from', 'purpose', 'message']
+    },
+    annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: true },
+    execute: async function (args) {
+      var site = sourceSite()
+      if (!site) {
+        return { ok: false, error: 'This tool only runs on one of David\'s sites.' }
+      }
+      var body = {
+        from: args.from,
+        purpose: args.purpose,
+        message: args.message,
+        source_site: site
+      }
+      if (args.reply_to) body.reply_to = args.reply_to
+
+      try {
+        var res = await fetch(REACH_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        })
+        var data = await res.json().catch(function () { return null })
+        if (!res.ok || !data || data.ok !== true) {
+          return {
+            ok: false,
+            error: (data && data.error) || ('HTTP ' + res.status),
+            field: data && data.field
+          }
+        }
+        return {
+          ok: true,
+          submission_id: data.submission_id,
+          note: data.note
+        }
+      } catch (err) {
+        return { ok: false, error: 'network error: ' + (err && err.message ? err.message : String(err)) }
+      }
+    }
+  })
+
+  navigator.modelContext.registerTool({
+    name: 'book_intro_call_with_david',
+    description:
+      "Return the booking URL for a PAID intro.co call with David Poblador. " +
+      "intro.co charges for these consultations; the end-user will be asked to pay on the booking page. " +
+      "Use only when the end-user explicitly wants a live advisory conversation and is prepared to pay. " +
+      "For asynchronous written questions, use contact_david instead.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        topic: {
+          type: 'string',
+          maxLength: 200,
+          description: 'Optional short description of what the end-user wants to discuss. Not sent to David — included in the tool response so you can present it back to the user.'
+        }
+      }
+    },
+    annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: true },
+    execute: async function (args) {
+      return {
+        ok: true,
+        url: INTRO_URL,
+        note: 'Paid booking via intro.co. Price and availability are shown on the booking page. David responds to accepted calls within a few days.',
+        topic: (args && args.topic) || null
+      }
+    }
+  })
+})()
