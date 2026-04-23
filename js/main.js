@@ -212,4 +212,138 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
       }
     }
   })
+
+  // Read-only tools backed by /agent.json (published by the home layout).
+  var indexPromise = null
+  function loadIndex() {
+    if (!indexPromise) {
+      indexPromise = fetch('/agent.json', { headers: { Accept: 'application/json' } })
+        .then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status)
+          return r.json()
+        })
+        .catch(function (err) {
+          indexPromise = null
+          throw err
+        })
+    }
+    return indexPromise
+  }
+  function indexError(err) {
+    return { ok: false, error: 'index unavailable: ' + (err && err.message ? err.message : String(err)) }
+  }
+  function yearFromDate(s) {
+    if (!s) return null
+    var m = String(s).match(/^(\d{4})/)
+    return m ? parseInt(m[1], 10) : null
+  }
+
+  navigator.modelContext.registerTool({
+    name: 'get_about_david',
+    description:
+      'Return structured information about David Poblador — his role, affiliation, languages, photo, ' +
+      'and the social/professional profiles and domains he publishes on. ' +
+      "Use this to answer 'Who is David?', 'What does David do?', or 'Where can I follow David?'. " +
+      'For writings, talks, or projects use list_davids_recent_posts, list_davids_appearances, or list_davids_projects.',
+    inputSchema: { type: 'object', properties: {} },
+    annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
+    execute: async function () {
+      try {
+        var idx = await loadIndex()
+        return { ok: true, site: idx.site, person: idx.person }
+      } catch (err) { return indexError(err) }
+    }
+  })
+
+  navigator.modelContext.registerTool({
+    name: 'list_davids_recent_posts',
+    description:
+      "List recent blog posts by David with title, date, URL, tags, and description. " +
+      "Entries include a markdown_url where available — fetch that to read the full post as clean markdown. " +
+      "Use this for 'What has David written about X?' or 'What are David's latest posts?'.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        limit: { type: 'integer', minimum: 1, maximum: 50, description: 'How many posts to return (default 10).' },
+        since_year: { type: 'integer', minimum: 2000, maximum: 2100, description: 'Only return posts from this year or later.' }
+      }
+    },
+    annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
+    execute: async function (args) {
+      try {
+        var idx = await loadIndex()
+        var posts = (idx.posts || []).slice()
+        if (args && args.since_year) {
+          posts = posts.filter(function (p) { var y = yearFromDate(p.date); return y !== null && y >= args.since_year })
+        }
+        var limit = (args && args.limit) || 10
+        return { ok: true, posts: posts.slice(0, limit), total: posts.length }
+      } catch (err) { return indexError(err) }
+    }
+  })
+
+  navigator.modelContext.registerTool({
+    name: 'list_davids_appearances',
+    description:
+      "List David's public appearances: talks, podcasts, press interviews, broadcast media, writing, and events. " +
+      "Each entry has a title, outlet, date, language, type, and optional links. " +
+      "Use this for 'Has David spoken about X?', 'What podcasts has David been on?', 'Where has David been quoted?'.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        type: {
+          type: 'string',
+          enum: ['talk', 'podcast', 'press', 'media', 'writing', 'event'],
+          description: 'Filter by appearance type.'
+        },
+        lang: {
+          type: 'string',
+          enum: ['en', 'es', 'ca', 'sv'],
+          description: 'Filter by the language the appearance was delivered in.'
+        },
+        since_year: { type: 'integer', minimum: 2000, maximum: 2100 },
+        limit: { type: 'integer', minimum: 1, maximum: 200, description: 'Default 20.' }
+      }
+    },
+    annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
+    execute: async function (args) {
+      try {
+        var idx = await loadIndex()
+        var items = (idx.portfolio || []).slice()
+        if (args && args.type) items = items.filter(function (i) { return i.type === args.type })
+        if (args && args.lang) items = items.filter(function (i) { return i.lang === args.lang })
+        if (args && args.since_year) {
+          items = items.filter(function (i) { var y = yearFromDate(i.date); return y !== null && y >= args.since_year })
+        }
+        var limit = (args && args.limit) || 20
+        return { ok: true, items: items.slice(0, limit), total: items.length }
+      } catch (err) { return indexError(err) }
+    }
+  })
+
+  navigator.modelContext.registerTool({
+    name: 'list_davids_projects',
+    description:
+      'List projects David has built or maintains — name, description, external link, and status (active, beta, archived). ' +
+      "Use this for 'What is David building?' or 'What are David's side projects?'.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        status: {
+          type: 'string',
+          enum: ['active', 'beta', 'archived'],
+          description: 'Filter by project status.'
+        }
+      }
+    },
+    annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
+    execute: async function (args) {
+      try {
+        var idx = await loadIndex()
+        var items = (idx.projects || []).slice()
+        if (args && args.status) items = items.filter(function (p) { return p.status === args.status })
+        return { ok: true, projects: items, total: items.length }
+      } catch (err) { return indexError(err) }
+    }
+  })
 })()
