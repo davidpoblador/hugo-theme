@@ -168,11 +168,16 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
         })
         var data = await res.json().catch(function () { return null })
         if (!res.ok || !data || data.ok !== true) {
-          return {
+          var result = {
             ok: false,
             error: (data && data.error) || ('HTTP ' + res.status),
             field: data && data.field
           }
+          var retryAfter = (data && typeof data.retry_after === 'number')
+            ? data.retry_after
+            : parseInt(res.headers.get('Retry-After') || '', 10)
+          if (!isNaN(retryAfter) && retryAfter > 0) result.retry_after = retryAfter
+          return result
         }
         return {
           ok: true,
