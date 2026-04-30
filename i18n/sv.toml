@@ -99,3 +99,21 @@ other = "Dela"
 
 [link_copied]
 other = "Länk kopierad!"
+
+[newsletter_label]
+other = "nyhetsbrev"
+
+[newsletter_cta]
+other = "prenumerera"
+
+[newsletter_placeholder]
+other = "du@exempel.com"
+
+[telegram_cta]
+other = "följ på telegram"
+
+[chat_label]
+other = "snacka"
+
+[chat_blurb]
+other = "Funderar du på nåt? Boka en stund."

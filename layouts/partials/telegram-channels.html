@@ -1,0 +1,14 @@
+{{- $align := .align | default "start" -}}
+{{- $ctx := .context | default . -}}
+{{- with $ctx.Site.Params.telegram -}}
+{{- $cta := T "telegram_cta" -}}
+<div class="flex flex-col gap-2 {{ if eq $align "center" }}items-center{{ else }}items-start{{ end }}">
+  {{- range . }}
+  {{- $itemCta := .cta | default $cta }}
+  <a href="{{ .url }}" target="_blank" rel="noopener" title="{{ $itemCta }}" class="inline-flex items-center h-7 gap-1.5 font-mono text-xs text-white bg-accent border border-accent px-2.5 hover:bg-transparent hover:text-accent transition-colors no-underline">
+    {{ partial "icons/telegram.html" (dict "class" "w-3.5 h-3.5") }}
+    <span>{{ $itemCta }}</span>
+  </a>
+  {{- end }}
+</div>
+{{- end -}}
