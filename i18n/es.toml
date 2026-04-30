@@ -99,3 +99,21 @@ other = "Compartir"
 
 [link_copied]
 other = "¡Enlace copiado!"
+
+[newsletter_label]
+other = "newsletter"
+
+[newsletter_cta]
+other = "suscribirme"
+
+[newsletter_placeholder]
+other = "tu@ejemplo.com"
+
+[telegram_cta]
+other = "sígueme en telegram"
+
+[chat_label]
+other = "hablamos"
+
+[chat_blurb]
+other = "¿Tienes algo entre manos? Reserva un rato."
