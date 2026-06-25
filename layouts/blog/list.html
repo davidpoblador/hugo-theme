@@ -29,6 +29,17 @@
 <div class="text-sm md:text-base leading-[1.8] text-neutral-600 dark:text-neutral-400 mb-12">{{ . }}</div>
 {{ end }}
 
+{{ if or .Site.Params.newsletter .Site.Params.telegram }}
+<div class="mb-12 font-mono text-sm space-y-1">
+  {{ with .Site.Params.newsletter }}
+  <div><a href="{{ printf "%s/subscribe" (strings.TrimRight "/" .url) }}" class="text-neutral-500 dark:text-neutral-400 hover:text-accent underline decoration-neutral-300/60 underline-offset-2 transition-colors">{{ T "blog_subscribe_cta" }} &rarr;</a></div>
+  {{ end }}
+  {{ with .Site.Params.telegram }}
+  <div><a href="{{ (index . 0).url }}" class="text-neutral-500 dark:text-neutral-400 hover:text-accent underline decoration-neutral-300/60 underline-offset-2 transition-colors">{{ T "blog_telegram_cta" }} &rarr;</a></div>
+  {{ end }}
+</div>
+{{ end }}
+
 {{ range .Pages.GroupByDate "2006" }}
 <section class="mb-14">
   <div class="relative mb-6">

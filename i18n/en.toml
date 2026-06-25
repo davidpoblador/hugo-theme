@@ -120,3 +120,9 @@ other = "chat"
 
 [chat_blurb]
 other = "Working through something? Grab a slot."
+
+[blog_subscribe_cta]
+other = "Subscribe to get new posts by email"
+
+[blog_telegram_cta]
+other = "Or follow along on Telegram"

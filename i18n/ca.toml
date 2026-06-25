@@ -120,3 +120,9 @@ other = "xerrem"
 
 [chat_blurb]
 other = "Tens alguna cosa entre mans? Reserva una estona."
+
+[blog_subscribe_cta]
+other = "Subscriu-te per rebre els articles per correu"
+
+[blog_telegram_cta]
+other = "O segueix-me a Telegram"
