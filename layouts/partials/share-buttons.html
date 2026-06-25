@@ -10,7 +10,8 @@
 {{- $linkedinURL := printf "https://www.linkedin.com/shareArticle?mini=true&url=%s&title=%s&source=%s" $encodedURL $encodedTitle $encodedURL -}}
 {{- $blueskyURL := printf "https://bsky.app/intent/compose?text=%s%%20%s" $encodedTitle $encodedURL -}}
 {{- $blueskyDeepLink := printf "bluesky://intent/compose?text=%s%%20%s" $encodedTitle $encodedURL -}}
-{{- $hackernewsURL := printf "https://news.ycombinator.com/submitlink?u=%s&t=%s" $encodedURL $encodedTitle -}}
+{{- $hackernewsTitle := replace $encodedTitle "+" "%20" -}}
+{{- $hackernewsURL := printf "https://news.ycombinator.com/submitlink?u=%s&t=%s" $encodedURL $hackernewsTitle -}}
 
 {{- if eq $style "sidebar" -}}
 <!-- Share Sidebar (desktop only) -->
