@@ -91,6 +91,9 @@ other = "Dela på LinkedIn"
 [share_on_bluesky]
 other = "Dela på Bluesky"
 
+[share_on_hackernews]
+other = "Dela på Hacker News"
+
 [copy_link]
 other = "Kopiera länk"
 

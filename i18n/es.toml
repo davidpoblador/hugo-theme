@@ -91,6 +91,9 @@ other = "Compartir en LinkedIn"
 [share_on_bluesky]
 other = "Compartir en Bluesky"
 
+[share_on_hackernews]
+other = "Compartir en Hacker News"
+
 [copy_link]
 other = "Copiar enlace"
 
