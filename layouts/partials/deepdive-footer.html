@@ -28,21 +28,21 @@
 </style>
 <footer class="dd-footer" role="contentinfo">
   <div class="dd-footer__inner">
-    {{- with .Site.Params.social }}
+    {{- if or .Site.Params.social .Site.Params.enableHackerNews }}
     <div class="dd-footer__social">
-      {{- range . }}
+      {{- with .Site.Params.social }}{{ range . }}
       <a href="{{ .url }}" target="_blank" rel="noopener" title="{{ .name }}" aria-label="{{ .name }}">{{ partial "icons/social-icon.html" (dict "icon" .icon "class" "") }}</a>
+      {{- end }}{{ end }}
+      {{- if .Site.Params.enableHackerNews }}
+      <a href="{{ $hnURL }}" target="_blank" rel="noopener noreferrer" title="{{ T "share_on_hackernews" }}" aria-label="{{ T "share_on_hackernews" }}">{{ partial "icons/social-icon.html" (dict "icon" "hackernews" "class" "") }}</a>
       {{- end }}
     </div>
     {{- end }}
-    {{- if or .Site.Params.enableHackerNews .Site.Params.telegram }}
+    {{- with .Site.Params.telegram }}
     <div class="dd-footer__row">
-      {{- if .Site.Params.enableHackerNews }}
-      <a class="dd-footer__btn" href="{{ $hnURL }}" target="_blank" rel="noopener noreferrer" title="{{ T "share_on_hackernews" }}">{{ partial "icons/social-icon.html" (dict "icon" "hackernews" "class" "") }}<span>{{ T "share_on_hackernews" }}</span></a>
-      {{- end }}
-      {{- with .Site.Params.telegram }}{{ range . }}
+      {{- range . }}
       <a class="dd-footer__btn" href="{{ .url }}" target="_blank" rel="noopener">{{ partial "icons/telegram.html" (dict "class" "") }}<span>{{ .cta | default (T "telegram_cta") }}</span></a>
-      {{- end }}{{ end }}
+      {{- end }}
     </div>
     {{- end }}
     {{- with .Site.Params.newsletter }}
