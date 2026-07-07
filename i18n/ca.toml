@@ -126,3 +126,6 @@ other = "Subscriu-te per rebre els articles per correu"
 
 [blog_telegram_cta]
 other = "O segueix-me a Telegram"
+
+[newsletter_blurb]
+other = "El butlletí: apunts i escrits nous, de tant en tant, directament a la bústia."
