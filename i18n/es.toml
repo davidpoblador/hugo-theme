@@ -120,3 +120,6 @@ other = "hablamos"
 
 [chat_blurb]
 other = "¿Tienes algo entre manos? Reserva un rato."
+
+[newsletter_blurb]
+other = "La newsletter: apuntes y textos nuevos, de vez en cuando, en tu correo."

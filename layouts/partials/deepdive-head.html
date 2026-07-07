@@ -1,0 +1,43 @@
+{{- /* ABOUTME: <head> for standalone deep-dive essays — SEO, OpenGraph, favicons, analytics. */ -}}
+{{- /* ABOUTME: Fed by the essay's front matter and site params so nothing is hand-copied per page. */ -}}
+{{- $url := replace .Permalink "/index.html" "/" -}}
+{{- $desc := .Description | default .Site.Params.description -}}
+{{- $ogTitle := .Params.htmlTitle | default .Title -}}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  {{- with .Site.Params.themeColor }}
+  <meta name="theme-color" content="{{ . }}" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="{{ $.Site.Params.themeColorDark | default . }}" media="(prefers-color-scheme: dark)">
+  {{- end }}
+  <title>{{ with .Params.htmlTitle }}{{ . }}{{ else }}{{ .Title }} &mdash; {{ .Site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ $desc }}">
+  <link rel="canonical" href="{{ $url }}">
+  <meta name="author" content="{{ .Site.Title }}">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <!-- OpenGraph -->
+  <meta property="og:site_name" content="{{ .Site.Title }}">
+  <meta property="og:title" content="{{ $ogTitle }}">
+  <meta property="og:description" content="{{ $desc }}">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="{{ $url }}">
+  {{- with resources.Get (printf "s/img/%s" ((.Site.Params.ogImage) | default .Site.Params.photo)) }}
+  <meta property="og:image" content="{{ .Permalink }}?v={{ .Content | md5 }}">
+  {{- end }}
+  <meta property="og:locale" content="{{ .Site.LanguageCode | default "en" }}">
+  {{- with .Date }}
+  <meta property="article:published_time" content="{{ .Format "2006-01-02" }}">
+  {{- end }}
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  {{- with .Site.Params.twitter }}
+  <meta name="twitter:site" content="{{ . }}">
+  {{- end }}
+  {{- with .Site.Params.analyticsID }}
+  <script data-website-id="{{ . }}" defer src="{{ $.Site.Params.analyticsSrc }}"></script>
+  {{- end }}
+</head>

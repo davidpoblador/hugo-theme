@@ -1,0 +1,14 @@
+{{- /* ABOUTME: Layout for standalone deep-dive essays — Hugo owns <head> and the shared footer. */ -}}
+{{- /* ABOUTME: Injects assets/<section>/<slug>/body.html verbatim so bespoke inline CSS/JS survive untouched. */ -}}
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en" }}">
+{{ partial "deepdive-head.html" . }}
+<body>
+{{- with resources.Get (printf "%s/%s/body.html" .Section .File.ContentBaseName) }}
+{{ .Content | safeHTML }}
+{{- end }}
+{{- if ne .Params.footer false }}
+{{ partial "deepdive-footer.html" . }}
+{{- end }}
+</body>
+</html>

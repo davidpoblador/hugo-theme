@@ -126,3 +126,6 @@ other = "Subscribe to get new posts by email"
 
 [blog_telegram_cta]
 other = "Or follow along on Telegram"
+
+[newsletter_blurb]
+other = "The newsletter: occasional notes and new writing, straight to your inbox."

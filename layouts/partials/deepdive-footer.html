@@ -1,0 +1,64 @@
+{{- /* ABOUTME: Shared footer for standalone deep-dive essays — share, social, telegram, newsletter, attribution. */ -}}
+{{- /* ABOUTME: Self-contained and palette-inheriting so it blends into any essay's bespoke light/dark design. */ -}}
+{{- $url := replace .Permalink "/index.html" "/" -}}
+{{- $encodedURL := urlquery $url -}}
+{{- $encodedTitle := urlquery (.Params.htmlTitle | default .Title) -}}
+{{- $hnURL := printf "https://news.ycombinator.com/submitlink?u=%s&t=%s" $encodedURL (replace $encodedTitle "+" "%20") -}}
+<style>
+.dd-footer{margin-top:6rem;border-top:1px solid;border-color:color-mix(in oklab, currentColor 18%, transparent);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.5}
+.dd-footer__inner{max-width:44rem;margin:0 auto;padding:2.75rem 1.5rem 3.5rem;display:flex;flex-direction:column;gap:1.5rem}
+.dd-footer a{color:inherit;text-decoration:none}
+.dd-footer__social{display:flex;flex-wrap:wrap;gap:1.1rem;align-items:center}
+.dd-footer__social a{display:inline-flex;opacity:.55;transition:opacity .15s}
+.dd-footer__social a:hover{opacity:1}
+.dd-footer svg{width:20px;height:20px;display:block}
+.dd-footer__row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
+.dd-footer__btn{display:inline-flex;align-items:center;gap:.5rem;height:2rem;padding:0 .85rem;border:1px solid;border-color:color-mix(in oklab, currentColor 32%, transparent);opacity:.85;transition:opacity .15s,border-color .15s}
+.dd-footer__btn svg{width:15px;height:15px}
+.dd-footer__btn:hover{opacity:1;border-color:currentColor}
+.dd-footer__news{display:flex;align-items:center;height:2rem;width:100%;max-width:20rem;border:1px solid;border-color:color-mix(in oklab, currentColor 32%, transparent)}
+.dd-footer__news input{flex:1;min-width:0;height:100%;background:transparent;border:0;color:inherit;font:inherit;padding:0 .65rem;outline:none}
+.dd-footer__news input::placeholder{color:inherit;opacity:.5}
+.dd-footer__news button{height:100%;padding:0 .7rem;background:transparent;border:0;border-left:1px solid;border-color:inherit;color:inherit;cursor:pointer;display:inline-flex;align-items:center;opacity:.75;transition:opacity .15s}
+.dd-footer__news button:hover{opacity:1}
+.dd-footer__news-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:.55rem}
+.dd-footer__news-label{opacity:.6;max-width:34rem;margin:0}
+.dd-footer__meta{display:flex;flex-wrap:wrap;gap:.35rem 1.25rem;opacity:.5}
+.dd-footer__meta a:hover{opacity:1;text-decoration:underline;text-underline-offset:2px}
+</style>
+<footer class="dd-footer" role="contentinfo">
+  <div class="dd-footer__inner">
+    {{- with .Site.Params.social }}
+    <div class="dd-footer__social">
+      {{- range . }}
+      <a href="{{ .url }}" target="_blank" rel="noopener" title="{{ .name }}" aria-label="{{ .name }}">{{ partial "icons/social-icon.html" (dict "icon" .icon "class" "") }}</a>
+      {{- end }}
+    </div>
+    {{- end }}
+    {{- if or .Site.Params.enableHackerNews .Site.Params.telegram }}
+    <div class="dd-footer__row">
+      {{- if .Site.Params.enableHackerNews }}
+      <a class="dd-footer__btn" href="{{ $hnURL }}" target="_blank" rel="noopener noreferrer" title="{{ T "share_on_hackernews" }}">{{ partial "icons/social-icon.html" (dict "icon" "hackernews" "class" "") }}<span>{{ T "share_on_hackernews" }}</span></a>
+      {{- end }}
+      {{- with .Site.Params.telegram }}{{ range . }}
+      <a class="dd-footer__btn" href="{{ .url }}" target="_blank" rel="noopener">{{ partial "icons/telegram.html" (dict "class" "") }}<span>{{ .cta | default (T "telegram_cta") }}</span></a>
+      {{- end }}{{ end }}
+    </div>
+    {{- end }}
+    {{- with .Site.Params.newsletter }}
+    {{- $cta := .cta | default (T "newsletter_cta") }}
+    {{- $placeholder := .placeholder | default (T "newsletter_placeholder") }}
+    <div class="dd-footer__news-wrap">
+      <p class="dd-footer__news-label">{{ T "newsletter_blurb" }}</p>
+      <form class="dd-footer__news" action="{{ printf "%s/subscribe" (strings.TrimRight "/" .url) }}" method="get" target="_blank" rel="noopener">
+        <input type="email" name="email" required autocomplete="email" placeholder="{{ $placeholder }}" aria-label="{{ $placeholder }}">
+        <button type="submit" aria-label="{{ $cta }}" title="{{ $cta }}">{{ partial "icons/send.html" (dict "class" "") }}</button>
+      </form>
+    </div>
+    {{- end }}
+    <div class="dd-footer__meta">
+      <span>&copy; {{ with .Date }}{{ .Format "2006" }}{{ else }}{{ now.Format "2006" }}{{ end }} <a href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a></span>
+      {{- with .CurrentSection }}{{ if .Title }}<a href="{{ .RelPermalink }}">&larr; {{ .Title }}</a>{{ end }}{{ end }}
+    </div>
+  </div>
+</footer>
