@@ -58,6 +58,7 @@
     {{- end }}
     <div class="dd-footer__meta">
       <span>&copy; {{ with .Date }}{{ .Format "2006" }}{{ else }}{{ now.Format "2006" }}{{ end }} <a href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a></span>
+      <span>{{ T "license_notice" }} <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="license noopener">CC BY-SA 4.0</a></span>
       {{- with .CurrentSection }}{{ if .Title }}<a href="{{ .RelPermalink }}">&larr; {{ .Title }}</a>{{ end }}{{ end }}
     </div>
   </div>

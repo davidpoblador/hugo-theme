@@ -129,3 +129,6 @@ other = "Or follow along on Telegram"
 
 [newsletter_blurb]
 other = "New writings, straight to your inbox."
+
+[license_notice]
+other = "Licensed under"
