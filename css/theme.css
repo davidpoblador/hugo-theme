@@ -23,9 +23,16 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Prevent pull-to-refresh on mobile */
+/* Prevent pull-to-refresh on mobile. The explicit background keeps the page
+   canvas near-white: the body is accent-colored so Safari iOS tints its
+   toolbar, and without a root background Safari paints unrendered tiles
+   during fast scrolls with that accent color. */
 html {
   overscroll-behavior: none;
+  background-color: #fafbff;
+}
+html.dark {
+  background-color: #0f1117;
 }
 
 /* Global font */
@@ -45,7 +52,6 @@ a {
 /* Gradient background for body */
 .bg-site-gradient {
   background: linear-gradient(170deg, #fafbff 0%, #f5f4f0 100%);
-  background-attachment: fixed;
 }
 
 /* Hide sidebar scrollbar */
