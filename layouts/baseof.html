@@ -166,6 +166,8 @@
                 {{- $altPath = "" -}}
               {{- else if $isBlogPost -}}
                 {{- $altPath = "/blog/" -}}
+              {{- else if $isTagSingle -}}
+                {{- $altPath = "/tags/" -}}
               {{- else if ne $relPath "/" -}}
                 {{- $altPath = $relPath -}}
               {{- end -}}
