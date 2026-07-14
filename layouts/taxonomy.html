@@ -2,10 +2,14 @@
 {{ define "og_title" }}{{ T "breadcrumb_tags" }}{{ end }}
 
 {{ define "content" }}
-<h1 class="font-mono text-2xl md:text-3xl font-bold text-neutral-900 dark:text-neutral-100 leading-tight mb-8">// {{ T "tags_title" }}</h1>
-<div class="space-y-2">
+<header class="mb-12">
+  <h1 class="font-mono text-2xl md:text-3xl font-bold text-neutral-900 dark:text-neutral-100 leading-tight mb-3">// {{ T "tags_title" }}</h1>
+  <p class="text-base md:text-lg text-neutral-500 dark:text-neutral-400 leading-relaxed">{{ T "tags_blurb" }}</p>
+</header>
+<div class="space-y-2 mb-12">
   {{ range .Data.Terms.Alphabetical }}
   <a href="{{ .Page.RelPermalink }}" class="inline-block font-mono text-sm text-accent hover:underline mr-4 mb-2">{{ .Page.LinkTitle }} <span class="text-neutral-400 dark:text-neutral-500">({{ .Count }})</span></a>
   {{ end }}
 </div>
+<a href="/blog/" class="font-mono text-sm text-accent hover:underline">&larr; {{ T "back_to_blog" }}</a>
 {{ end }}
