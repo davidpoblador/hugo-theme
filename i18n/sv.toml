@@ -37,6 +37,12 @@ other = "taggar"
 [tag_prefix]
 other = "tagg:"
 
+[tags_blurb]
+other = "Ämnen från bloggen."
+
+[all_tags]
+other = "Alla taggar"
+
 [updated]
 other = "uppdaterad"
 

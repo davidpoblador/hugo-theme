@@ -37,6 +37,12 @@ other = "tags"
 [tag_prefix]
 other = "tag:"
 
+[tags_blurb]
+other = "Topics from the blog."
+
+[all_tags]
+other = "All tags"
+
 [updated]
 other = "updated"
 

@@ -37,6 +37,12 @@ other = "etiquetas"
 [tag_prefix]
 other = "etiqueta:"
 
+[tags_blurb]
+other = "Temas del blog."
+
+[all_tags]
+other = "Todas las etiquetas"
+
 [updated]
 other = "actualizado"
 
