@@ -112,6 +112,10 @@
   {{- $webSite := dict "@type" "WebSite" "@id" (printf "%s#website" $baseURL) "url" $baseURL "name" .Site.Title "description" .Site.Params.description "inLanguage" .Site.LanguageCode "publisher" (dict "@id" (printf "%s#person" $baseURL)) -}}
   {{- $graph := dict "@context" "https://schema.org" "@graph" (slice $person $profilePage $webSite) -}}
   {{ printf `<script type="application/ld+json">%s</script>` ($graph | jsonify (dict "noHTMLEscape" true)) | safeHTML }}
+  {{- /* rel="me" lets profiles that link back here (Mastodon, IndieAuth) verify the link. */}}
+  {{- range $socialURLs }}
+  <link rel="me" href="{{ . }}">
+  {{- end }}
   {{- end }}
 </head>
 
