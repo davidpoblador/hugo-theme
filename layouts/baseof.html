@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ .Site.LanguageCode | default "en" }}">
+<html lang="{{ .Site.Language.Locale }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -27,7 +27,7 @@
   <meta property="og:type" content="{{ block "og_type" . }}website{{ end }}">
   <meta property="og:url" content="{{ replace .Permalink "/index.html" "/" }}">
   <meta property="og:image" content="{{ block "og_image" . }}{{- $ogImg := resources.Get (printf "s/img/%s" ((.Site.Params.ogImage) | default .Site.Params.photo)) -}}{{ $ogImg.Permalink }}?v={{ $ogImg.Content | md5 }}{{ end }}">
-  <meta property="og:locale" content="{{ .Site.LanguageCode | default "en" }}">
+  <meta property="og:locale" content="{{ .Site.Language.Locale }}">
   {{ block "extra_meta" . }}{{ end }}
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
@@ -109,7 +109,7 @@
     {{- $person = merge $person (dict "jobTitle" .) -}}
   {{- end -}}
   {{- $profilePage := dict "@type" "ProfilePage" "@id" (printf "%s#profilepage" $baseURL) "url" $baseURL "mainEntity" (dict "@id" (printf "%s#person" $baseURL)) -}}
-  {{- $webSite := dict "@type" "WebSite" "@id" (printf "%s#website" $baseURL) "url" $baseURL "name" .Site.Title "description" .Site.Params.description "inLanguage" .Site.LanguageCode "publisher" (dict "@id" (printf "%s#person" $baseURL)) -}}
+  {{- $webSite := dict "@type" "WebSite" "@id" (printf "%s#website" $baseURL) "url" $baseURL "name" .Site.Title "description" .Site.Params.description "inLanguage" .Site.Language.Locale "publisher" (dict "@id" (printf "%s#person" $baseURL)) -}}
   {{- $graph := dict "@context" "https://schema.org" "@graph" (slice $person $profilePage $webSite) -}}
   {{ printf `<script type="application/ld+json">%s</script>` ($graph | jsonify (dict "noHTMLEscape" true)) | safeHTML }}
   {{- /* rel="me" lets profiles that link back here (Mastodon, IndieAuth) verify the link. */}}
@@ -150,7 +150,7 @@
         {{- $isBlogRelated := or $isBlogPost $isBlogList $isTagList $isTagSingle -}}
         <span class="ml-auto flex gap-2">
         {{- range $alt := .Site.Params.alternates -}}
-          {{- if and (ne $alt.hreflang $.Site.LanguageCode) (ne $alt.hreflang "x-default") -}}
+          {{- if and (ne $alt.hreflang $.Site.Language.Locale) (ne $alt.hreflang "x-default") -}}
             {{- $base := strings.TrimRight "/" $alt.href -}}
             {{- $noBlog := $alt.noBlog -}}
             {{- $altPath := "" -}}
